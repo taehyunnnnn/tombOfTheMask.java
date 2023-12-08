@@ -11,7 +11,7 @@ public class main {
 
 	}
 
-	GraphicsConsole gc = new GraphicsConsole(24*24, 24*30, "Example");
+	GraphicsConsole gc = new GraphicsConsole(36*17, 36*30, "Example");
 
 	main() throws InterruptedException {
 
@@ -34,13 +34,29 @@ public class main {
 				.getImage(gc.getClass().getClassLoader().getResource("sources/wall1.png"));
 		wall2 = Toolkit.getDefaultToolkit()
 				.getImage(gc.getClass().getClassLoader().getResource("sources/wall2.png"));
-
+		
+		Clip music = gc.loadSound("sources/main.wav");
+		//gc.playSoundLoop(music);
+		
+		Clip sstar1 = gc.loadSound("sources/1-star.wav");
+		Clip sstar2 = gc.loadSound("sources/2-star.wav");
+		Clip sstar3 = gc.loadSound("sources/3-star.wav");
+		Clip scoin = gc.loadSound("sources/coin.wav");
+		Clip sdeath = gc.loadSound("sources/death.wav");
+		Clip sjump = gc.loadSound("sources/jump.wav");
+		Clip sland = gc.loadSound("sources/landing.wav");
+		Clip sscore_count = gc.loadSound("sources/score-count.wav");
+		Clip sshield = gc.loadSound("sources/shield.wav");
+		Clip sspikein = gc.loadSound("sources/spikesinwalls-attack.wav");
+		Clip sspikeout = gc.loadSound("sources/spikesinwalls-on-off.wav");
+		Clip sstart = gc.loadSound("sources/start.wav");
+		
 		gc.setLocationRelativeTo(null);
 
 		Boolean Start, Finish, Dead;
 		int Life;
 		int Maskx, Masky;
-		Boolean Move;
+		Boolean Jump;
 		Boolean Maskw, Maska, Masks, Maskd;
 
 		int Dot, Star, Coin;
@@ -52,49 +68,59 @@ public class main {
 		
 		Life = 1;
 		
-		Maskx = 19;
+		Maskx = 12;
 		Masky = 28;
 		Dot = 0;
 		Star = 0;
 		Coin = 0;
 		
-		Move = true;
+		Jump = false;
 		Maskw = false;
 		Maska = false;
 		Masks = false;
 		Maskd = false;
 
-		int[][] map = { {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,4,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,1,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,3,1,1,1,9,0,0,0,0},
-			    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,0,9,9,9,0,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,0,9,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,1,1,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,1,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,1,9,9,9,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,1,1,1,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,0,1,9,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,0,1,9,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,1,3,9,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9,9,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,9,1,1,1,1,9,0,0,9,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,9,1,9,9,1,9,9,9,9,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,0,9,1,9,9,1,1,1,1,1,2,9,0,0,0},
-		        {0,0,0,0,0,0,0,9,9,9,9,1,9,9,9,9,9,9,9,9,9,9,9,9},
-		        {0,0,0,0,0,0,0,9,1,1,1,1,1,1,1,1,1,9,9,3,1,1,1,9},
-		        {0,0,0,0,0,0,0,9,1,0,0,1,9,9,9,9,2,1,1,1,0,0,1,9},
-		        {0,0,0,0,0,0,0,9,1,0,0,1,9,0,0,9,9,9,9,9,0,0,1,9},
-		        {0,0,0,0,0,0,0,9,1,1,1,1,9,0,0,0,9,0,0,0,0,0,1,9},
-		        {0,0,0,0,0,0,0,9,9,9,9,9,9,0,0,0,9,0,0,0,0,0,1,9},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,1,9},
-		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9} };
+		
+		
+		
+		
+		// 16 x 29
+		int[][] map = {
+				{0,0,0,0,0,0,0,0,0,0,9,9,9,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,9,4,9,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0},
+				{0,0,0,0,0,0,0,9,9,9,9,1,9,0,0,0,0},
+				{0,0,0,0,0,0,0,9,3,1,1,1,9,0,0,0,0},
+			    {0,0,0,0,0,0,0,9,1,0,9,9,9,0,0,0,0},
+		        {0,0,0,0,0,0,0,9,1,0,9,9,0,0,0,0,0},
+		        {0,0,0,0,0,0,0,9,1,1,1,9,0,0,0,0,0},
+		        {0,0,0,0,0,0,0,9,9,9,1,9,0,0,0,0,0},
+		        {0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0,0},
+		        {0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0,0},
+		        {0,0,0,0,0,0,0,9,9,9,1,9,9,9,0,0,0},
+		        {0,0,0,0,0,0,0,9,1,1,1,1,1,9,0,0,0},
+		        {0,0,0,0,0,0,0,9,1,0,1,9,1,9,0,0,0},
+		        {0,0,0,0,0,0,0,9,1,0,1,9,1,9,0,0,0},
+		        {0,0,0,0,0,0,0,9,1,1,3,9,1,9,0,0,0},
+		        {0,0,0,9,9,9,9,9,9,9,9,9,1,9,0,0,0},
+		        {0,0,0,9,1,1,1,1,9,0,0,9,1,9,0,0,0},
+		        {0,0,0,9,1,9,9,1,9,9,9,9,1,9,0,0,0},
+		        {0,0,0,9,1,9,9,1,1,1,1,1,2,9,0,0,0},
+		        {9,9,9,9,1,9,9,9,9,9,9,9,9,9,9,9,9},
+		        {9,1,1,1,1,1,1,1,1,1,9,9,3,1,1,1,9},
+		        {9,1,0,0,1,9,9,9,9,2,1,1,1,0,0,1,9},
+		        {9,1,0,0,1,9,0,0,9,9,9,9,9,0,0,1,9},
+		        {9,1,1,1,1,9,0,0,0,9,0,0,0,0,0,1,9},
+		        {9,9,9,9,9,9,0,0,0,9,0,0,0,0,0,1,9},
+		        {0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,1,9},
+		        {0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9}
+		        };
 
+		gc.playSound(sstart);
+		
+		
 		while (Life > 0) {
 			synchronized (gc) {
 
@@ -106,29 +132,29 @@ public class main {
 					for (int col = 0; col < map[0].length; col++) {
 						if (map[row][col] == 0) {
 							gc.setColor(Color.BLACK);
-							gc.fillRect(col * 24, row * 24, 24, 24);
+							gc.fillRect(col * 36, row * 36, 36, 36);
 						}
 						if (map[row][col] == 9) {
 
-							gc.drawImage(wall1, col * 24, row * 24, 24, 24);
+							gc.drawImage(wall1, col * 36, row * 36, 36, 36);
 						}
 						if (map[row][col] == 1) {
-							gc.drawImage(dot, col * 24, row * 24, 24, 24);
+							gc.drawImage(dot, col * 36, row * 36, 36, 36);
 						}
 						if (map[row][col] == 2) {
-							gc.drawImage(coin, col * 24, row * 24, 24, 24);
+							gc.drawImage(coin, col * 36, row * 36, 36, 36);
 						}
 						if (map[row][col] == 3) {
-							gc.drawImage(star, col * 24, row * 24, 24, 24);
+							gc.drawImage(star, col * 36, row * 36, 36, 36);
 						}
 						if (map[row][col] == 4) {
-							gc.drawImage(exit, col * 24, row * 24, 24, 24);
+							gc.drawImage(exit, col * 36, row * 36, 36, 36);
 						}
 						if (map[row][col] == 5) {
-							gc.drawImage(spike, col * 24, row * 24, 24, 24);
+							gc.drawImage(spike, col * 36, row * 36, 36, 36);
 						}
 						if (map[row][col] == 6) {
-							gc.drawImage(spiketrap, col * 24, row * 24, 24, 24);
+							gc.drawImage(spiketrap, col * 36, row * 36, 36, 36);
 						}
 						if (map[Masky][Maskx] == 1) {
 							map[Masky][Maskx] = 0;
@@ -152,14 +178,14 @@ public class main {
 					}
 				}
 
-				gc.drawImage(mask, Maskx * 24, Masky * 24, 24, 24);
+				gc.drawImage(mask, Maskx * 36, Masky * 36, 36, 36);
 
 			}
 
-			Thread.sleep(5);
+			Thread.sleep(10);
 
 			// User Input
-			if (Move) {
+			if (Jump == false) {
 				if (gc.isKeyDown('W')) {
 					Maskw = true;
 					Maska = false;
@@ -187,46 +213,74 @@ public class main {
 			if (Maskw) {
 				if (map[Masky - 1][Maskx] != 9 && map[Masky - 1][Maskx] != 6 && map[Masky - 1][Maskx] != 5) {
 					Masky--;
-					Move = false;
+					if (Jump == false) {
+						gc.playSound(sjump);
+					}
+					Jump = true;
 				} 
 				else if ((map[Masky - 1][Maskx] == 5 || map[Masky - 1][Maskx] == 6)) {
 					Life --;
 				}
-				else
-					Move = true;
+				else {
+					if (Jump) {
+						gc.playSound(sland);
+					}
+					Jump = false;
+				}
 			}
 			if (Maska) {
 				if (map[Masky][Maskx - 1] != 9 && map[Masky][Maskx - 1] != 6 && map[Masky][Maskx - 1] != 5) {
 					Maskx--;
-					Move = false;
+					if (Jump == false) {
+						gc.playSound(sjump);
+					}
+					Jump = true;
 				} 
 				else if ((map[Masky][Maskx - 1] == 5 || map[Masky][Maskx - 1] == 6)) {
 					Life --;
 				}
-				else
-					Move = true;
+				else {
+					if (Jump) {
+						gc.playSound(sland);
+					}
+					Jump = false;
+				}
 			}
 			if (Masks) {
 				if (map[Masky + 1][Maskx] != 9 && map[Masky + 1][Maskx] != 6 && map[Masky + 1][Maskx] != 5) {
 					Masky++;
-					Move = false;
+					if (Jump == false) {
+						gc.playSound(sjump);
+					}
+					Jump = true;
 				} 
 				else if ((map[Masky + 1][Maskx] == 5 || map[Masky + 1][Maskx] == 6)) {
 					Life --;
 				}
-				else
-					Move = true;
+				else {
+					if (Jump) {
+						gc.playSound(sland);
+					}
+					Jump = false;
+				}
 			}
 			if (Maskd) {
 				if (map[Masky][Maskx + 1] != 9 && map[Masky][Maskx + 1] != 6 && map[Masky][Maskx + 1] != 5) {
 					Maskx++;
-					Move = false;
+					if (Jump == false) {
+						gc.playSound(sjump);
+					}
+					Jump = true;
 				} 
 				else if ((map[Masky][Maskx + 1] == 5 || map[Masky][Maskx + 1] == 6)) {
 					Life --;
 				}
-				else
-					Move = true;
+				else {
+					if (Jump) {
+						gc.playSound(sland);
+					}
+					Jump = false;
+				}
 			}
 			
 			// Checker
@@ -241,7 +295,6 @@ public class main {
 			}
 			
 			
-			
 
 		}
 		
@@ -250,7 +303,7 @@ public class main {
 		}
 		
 		while (Dead) {
-			gc.fillRect(Maskx * 24, Masky * 24, 24, 24);
+			gc.fillRect(Maskx * 36, Masky * 36, 36, 36);
 			
 			
 		}
@@ -265,38 +318,3 @@ public class main {
 		
 	}
 }
-
-
-
-/*
-int[][] map = { {9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9},
-			  {9,1,0,9,0,0,0,0,9,0,0,0,0,6,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9},
-				        {9,1,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,9,2,0,0,0,0,1,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,9,0,0,0,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9},
-				        {9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9} };
- */
-
-
-
-
-
-
