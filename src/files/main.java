@@ -12,28 +12,23 @@ public class main {
 	}
 
 	GraphicsConsole gc = new GraphicsConsole(36*17, 36*30, "Example");
-
+Image getImage(String source) {
+	
+		return Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource(source));
+		
+	}
 	main() throws InterruptedException {
 
 		Image coin, dot, exit, mask, spike, spiketrap, star, wall1, wall2;
-		coin = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/coin.png"));
-		dot = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/dot.png"));
-		exit = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/exit.png"));
-		mask = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/mask.png"));
-		spike = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/spike.png"));
-		spiketrap = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/spike trap.png"));
-		star = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/star.png"));
-		wall1 = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/wall1.png"));
-		wall2 = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/wall2.png"));
+		coin = getImage("sources/coin.png");
+		dot = getImage("sources/dot.png");
+		exit = getImage("sources/exit.png");
+		mask = getImage("sources/mask.png");
+		spike = getImage("sources/spike.png");
+		spiketrap = getImage("sources/spike trap.png");
+		star = getImage("sources/star.png");
+		wall1 = getImage("sources/wall1.png");
+		wall2 = getImage("sources/wall2.png");
 		
 		Clip music = gc.loadSound("sources/main.wav");
 		//gc.playSoundLoop(music);
