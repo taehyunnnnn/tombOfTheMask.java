@@ -10,13 +10,12 @@ public class main {
 		new main();
 
 	}
-
 	GraphicsConsole gc = new GraphicsConsole(36*17, 36*30, "Example");
-Image getImage(String source) {
-	
+	//retreiving images method (the source string is where the file is)
+	Image getImage(String source) {
 		return Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource(source));
-		
 	}
+	
 	main() throws InterruptedException {
 
 		Image coin, dot, exit, mask, spike, spiketrap, star, wall1, wall2;
