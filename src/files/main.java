@@ -11,6 +11,12 @@ public class main {
 
 	}
 	GraphicsConsole gc = new GraphicsConsole(36*17, 36*30, "Example");
+
+	//retreiving sound method (The source string is where the file is)
+	Clip getSound (String sound) {	
+		return gc.loadSound(sound);
+	}
+	
 	//retreiving images method (the source string is where the file is)
 	Image getImage(String source) {
 		return Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource(source));
@@ -28,22 +34,24 @@ public class main {
 		star = getImage("sources/star.png");
 		wall1 = getImage("sources/wall1.png");
 		wall2 = getImage("sources/wall2.png");
-		
-		Clip music = gc.loadSound("sources/main.wav");
+
+		//Sound variable names
+		Clip music, sstar1, sstar2, sstar3, scoin, sdeath, sjump, sland, sscore_count, sshield, sspikein, sspikeout, sstart;
+		music = getSound("sources/main.wav");
 		//gc.playSoundLoop(music);
-		
-		Clip sstar1 = gc.loadSound("sources/1-star.wav");
-		Clip sstar2 = gc.loadSound("sources/2-star.wav");
-		Clip sstar3 = gc.loadSound("sources/3-star.wav");
-		Clip scoin = gc.loadSound("sources/coin.wav");
-		Clip sdeath = gc.loadSound("sources/death.wav");
-		Clip sjump = gc.loadSound("sources/jump.wav");
-		Clip sland = gc.loadSound("sources/landing.wav");
-		Clip sscore_count = gc.loadSound("sources/score-count.wav");
-		Clip sshield = gc.loadSound("sources/shield.wav");
-		Clip sspikein = gc.loadSound("sources/spikesinwalls-attack.wav");
-		Clip sspikeout = gc.loadSound("sources/spikesinwalls-on-off.wav");
-		Clip sstart = gc.loadSound("sources/start.wav");
+
+		sstar1 =getSound("sources/1-star.wav");
+		sstar2 =getSound("sources/2-star.wav");
+		sstar3 =getSound("sources/3-star.wav");
+		scoin = getSound("sources/coin.wav");
+		sdeath =getSound("sources/death.wav");
+		sjump =getSound("sources/jump.wav");
+		sland = getSound("sources/landing.wav");
+		sscore_count = getSound("sources/score-count.wav");
+		sshield = getSound("sources/shield.wav");
+		sspikein = getSound("sources/spikesinwalls-attack.wav");
+		sspikeout = getSound("sources/spikesinwalls-on-off.wav");
+		sstart = getSound("sources/start.wav");
 		
 		gc.setLocationRelativeTo(null);
 
