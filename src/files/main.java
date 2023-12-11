@@ -10,20 +10,23 @@ public class main {
 		new main();
 
 	}
-	GraphicsConsole gc = new GraphicsConsole(36*17, 36*30, "Example");
 
-	//retreiving sound method (The source string is where the file is)
-	Clip getSound (String sound) {	
+	GraphicsConsole gc = new GraphicsConsole(36*19, 36*30, "Example");
+	//GraphicsConsole gc = new GraphicsConsole(1500,1200, "Example");
+	
+	Clip getSound (String sound) {
 		return gc.loadSound(sound);
 	}
 	
-	//retreiving images method (the source string is where the file is)
 	Image getImage(String source) {
+
 		return Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource(source));
+
 	}
+
 	
 	main() throws InterruptedException {
-
+		
 		Image coin, dot, exit, mask, spike, spiketrap, star, wall1, wall2;
 		coin = getImage("sources/coin.png");
 		dot = getImage("sources/dot.png");
@@ -34,24 +37,23 @@ public class main {
 		star = getImage("sources/star.png");
 		wall1 = getImage("sources/wall1.png");
 		wall2 = getImage("sources/wall2.png");
-
-		//Sound variable names
-		Clip music, sstar1, sstar2, sstar3, scoin, sdeath, sjump, sland, sscore_count, sshield, sspikein, sspikeout, sstart;
-		music = getSound("sources/main.wav");
-		//gc.playSoundLoop(music);
-
-		sstar1 =getSound("sources/1-star.wav");
-		sstar2 =getSound("sources/2-star.wav");
-		sstar3 =getSound("sources/3-star.wav");
-		scoin = getSound("sources/coin.wav");
-		sdeath =getSound("sources/death.wav");
-		sjump =getSound("sources/jump.wav");
-		sland = getSound("sources/landing.wav");
-		sscore_count = getSound("sources/score-count.wav");
-		sshield = getSound("sources/shield.wav");
-		sspikein = getSound("sources/spikesinwalls-attack.wav");
-		sspikeout = getSound("sources/spikesinwalls-on-off.wav");
-		sstart = getSound("sources/start.wav");
+		
+		Clip music, sstar1, sstar2, sstar3, scoin, sstar, sdeath, sexit, sjump, sland, sscore_count, sshield, sspikein, sspikeout, sstart;
+		music = gc.loadSound("sources/main.wav");
+		sstar1 = gc.loadSound("sources/1-star.wav");
+		sstar2 = gc.loadSound("sources/2-star.wav");
+		sstar3 = gc.loadSound("sources/3-star.wav");
+		scoin = gc.loadSound("sources/coin.wav");
+		sstar = gc.loadSound("sources/star.wav");
+		sdeath = gc.loadSound("sources/death.wav");
+		sexit = gc.loadSound("sources/win.wav");
+		sjump = gc.loadSound("sources/jump.wav");
+		sland = gc.loadSound("sources/landing.wav");
+		sscore_count = gc.loadSound("sources/score-count.wav");
+		sshield = gc.loadSound("sources/shield.wav");
+		sspikein = gc.loadSound("sources/spikesinwalls-attack.wav");
+		sspikeout = gc.loadSound("sources/spikesinwalls-on-off.wav");
+		sstart = gc.loadSound("sources/start.wav");
 		
 		gc.setLocationRelativeTo(null);
 
@@ -81,47 +83,45 @@ public class main {
 		Maska = false;
 		Masks = false;
 		Maskd = false;
-
 		
-		
+		stages maps = new stages();
 		
 		
 		// 16 x 29
 		int[][] map = {
-				{0,0,0,0,0,0,0,0,0,0,9,9,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,9,4,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0},
-				{0,0,0,0,0,0,0,9,9,9,9,1,9,0,0,0,0},
-				{0,0,0,0,0,0,0,9,3,1,1,1,9,0,0,0,0},
-			    {0,0,0,0,0,0,0,9,1,0,9,9,9,0,0,0,0},
-		        {0,0,0,0,0,0,0,9,1,0,9,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,9,1,1,1,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,9,9,9,1,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0,0},
-		        {0,0,0,0,0,0,0,9,9,9,1,9,9,9,0,0,0},
-		        {0,0,0,0,0,0,0,9,1,1,1,1,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,9,1,0,1,9,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,9,1,0,1,9,1,9,0,0,0},
-		        {0,0,0,0,0,0,0,9,1,1,3,9,1,9,0,0,0},
-		        {0,0,0,9,9,9,9,9,9,9,9,9,1,9,0,0,0},
-		        {0,0,0,9,1,1,1,1,9,0,0,9,1,9,0,0,0},
-		        {0,0,0,9,1,9,9,1,9,9,9,9,1,9,0,0,0},
-		        {0,0,0,9,1,9,9,1,1,1,1,1,2,9,0,0,0},
-		        {9,9,9,9,1,9,9,9,9,9,9,9,9,9,9,9,9},
-		        {9,1,1,1,1,1,1,1,1,1,9,9,3,1,1,1,9},
-		        {9,1,0,0,1,9,9,9,9,2,1,1,1,0,0,1,9},
-		        {9,1,0,0,1,9,0,0,9,9,9,9,9,0,0,1,9},
-		        {9,1,1,1,1,9,0,0,0,9,0,0,0,0,0,1,9},
-		        {9,9,9,9,9,9,0,0,0,9,0,0,0,0,0,1,9},
-		        {0,0,0,0,0,0,0,0,0,9,0,0,0,0,0,1,9},
-		        {0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9}
-		        };
-
-		gc.playSound(sstart);
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{9,4,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{9,1,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{9,1,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+				{9,1,9,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0},
+				{9,1,1,1,1,1,1,9,9,9,9,9,5,5,5,5,0,0,0},
+				{9,9,9,9,9,9,1,9,1,1,1,1,0,0,0,5,0,0,0},
+				{0,0,9,1,1,1,1,9,1,9,9,1,0,0,0,5,0,0,0},
+			    {0,0,9,1,6,3,1,1,1,9,9,1,0,0,0,9,9,9,0},
+		        {0,0,9,1,0,0,9,9,1,9,9,1,9,2,1,2,3,9,9},
+		        {0,0,9,1,0,9,1,1,1,9,9,1,1,1,9,1,1,2,9},
+		        {0,0,9,1,1,1,1,9,9,9,9,9,9,9,9,9,9,1,9},
+		        {0,0,9,9,9,9,9,9,9,9,9,1,1,1,1,1,9,1,9},
+		        {0,0,0,0,0,9,1,1,1,1,9,1,9,9,9,1,9,1,9},
+		        {0,0,0,0,0,6,1,9,9,1,9,1,9,9,9,1,9,1,9},
+		        {0,0,0,0,0,6,1,9,9,1,2,1,1,1,9,1,1,1,9},
+		        {0,0,0,0,0,6,1,9,9,9,9,2,9,1,9,9,9,9,9},
+		        {0,0,0,0,0,9,1,1,1,1,1,1,9,1,1,1,1,1,9},
+		        {0,0,0,0,9,9,6,6,6,9,9,9,9,3,9,9,9,1,9},
+		        {0,0,0,0,0,0,0,0,0,9,1,1,1,1,1,1,9,1,9},
+		        {0,0,0,0,0,0,0,0,0,9,1,9,9,6,9,1,9,1,9},
+		        {0,0,0,0,0,0,0,0,0,9,1,1,9,0,9,1,1,1,9},
+		        {0,0,0,0,0,0,0,0,0,0,9,1,9,9,9,9,9,9,9},
+		        {0,0,0,0,0,0,0,0,0,0,9,2,1,1,1,1,1,1,9},
+		        {0,0,0,0,0,0,0,0,0,0,9,1,0,0,0,0,0,0,9},
+		        {0,0,0,0,0,0,0,0,0,0,9,1,0,0,0,0,0,0,9},
+		        {0,0,0,0,0,0,0,0,0,0,9,9,0,0,0,0,0,0,9},
+		        {0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9} };
 		
+		gc.playSound(sstart);
+		gc.playSoundLoop(music);
 		
 		while (Life > 0) {
 			synchronized (gc) {
@@ -165,13 +165,17 @@ public class main {
 						if (map[Masky][Maskx] == 2) {
 							map[Masky][Maskx] = 0;
 							Coin++;
+							gc.playSound(scoin);
 						}
 						if (map[Masky][Maskx] == 3) {
 							map[Masky][Maskx] = 0;
 							Star++;
+							gc.playSound(sstar);
 						}
 						if (map[Masky][Maskx] == 4) {
 							Finish = true;
+							map[Masky][Maskx] = 0;
+							gc.playSound(sexit);
 						}
 						if (map[Masky][Maskx] == 5) {
 							Life = 0;
@@ -184,7 +188,7 @@ public class main {
 
 			}
 
-			Thread.sleep(10);
+			Thread.sleep(15);
 
 			// User Input
 			if (Jump == false) {
@@ -220,7 +224,7 @@ public class main {
 					}
 					Jump = true;
 				} 
-				else if ((map[Masky - 1][Maskx] == 5 || map[Masky - 1][Maskx] == 6)) {
+				else if ((map[Masky - 1][Maskx] == 5 || map[Masky - 1][Maskx] == 666)) {
 					Life --;
 				}
 				else {
@@ -238,7 +242,7 @@ public class main {
 					}
 					Jump = true;
 				} 
-				else if ((map[Masky][Maskx - 1] == 5 || map[Masky][Maskx - 1] == 6)) {
+				else if ((map[Masky][Maskx - 1] == 5 || map[Masky][Maskx - 1] == 666)) {
 					Life --;
 				}
 				else {
@@ -256,7 +260,7 @@ public class main {
 					}
 					Jump = true;
 				} 
-				else if ((map[Masky + 1][Maskx] == 5 || map[Masky + 1][Maskx] == 6)) {
+				else if ((map[Masky + 1][Maskx] == 5 || map[Masky + 1][Maskx] == 666)) {
 					Life --;
 				}
 				else {
@@ -274,7 +278,7 @@ public class main {
 					}
 					Jump = true;
 				} 
-				else if ((map[Masky][Maskx + 1] == 5 || map[Masky][Maskx + 1] == 6)) {
+				else if ((map[Masky][Maskx + 1] == 5 || map[Masky][Maskx + 1] == 666)) {
 					Life --;
 				}
 				else {
@@ -296,8 +300,6 @@ public class main {
 				break;
 			}
 			
-			
-
 		}
 		
 		while (Finish) {
@@ -310,13 +312,6 @@ public class main {
 			
 		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
+
 	}
 }
