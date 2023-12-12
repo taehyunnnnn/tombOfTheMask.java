@@ -11,8 +11,7 @@ public class main {
 
 	}
 
-	GraphicsConsole gc = new GraphicsConsole(36*19, 36*30, "Example");
-	//GraphicsConsole gc = new GraphicsConsole(1500,1200, "Example");
+	GraphicsConsole gc = new GraphicsConsole(12*100, 12*50, "Example");
 	
 	Clip getSound (String sound) {
 		return gc.loadSound(sound);
@@ -57,6 +56,8 @@ public class main {
 		
 		gc.setLocationRelativeTo(null);
 
+		int pixel = 12;
+		
 		Boolean Start, Finish, Dead;
 		int Life;
 		int Maskx, Masky;
@@ -86,44 +87,16 @@ public class main {
 		
 		stages maps = new stages();
 		
-		
-		// 16 x 29
-		int[][] map = {
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-				{9,9,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-				{9,4,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-				{9,1,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-				{9,1,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-				{9,1,9,9,9,9,9,9,0,0,0,0,0,0,0,0,0,0,0},
-				{9,1,1,1,1,1,1,9,9,9,9,9,5,5,5,5,0,0,0},
-				{9,9,9,9,9,9,1,9,1,1,1,1,0,0,0,5,0,0,0},
-				{0,0,9,1,1,1,1,9,1,9,9,1,0,0,0,5,0,0,0},
-			    {0,0,9,1,6,3,1,1,1,9,9,1,0,0,0,9,9,9,0},
-		        {0,0,9,1,0,0,9,9,1,9,9,1,9,2,1,2,3,9,9},
-		        {0,0,9,1,0,9,1,1,1,9,9,1,1,1,9,1,1,2,9},
-		        {0,0,9,1,1,1,1,9,9,9,9,9,9,9,9,9,9,1,9},
-		        {0,0,9,9,9,9,9,9,9,9,9,1,1,1,1,1,9,1,9},
-		        {0,0,0,0,0,9,1,1,1,1,9,1,9,9,9,1,9,1,9},
-		        {0,0,0,0,0,6,1,9,9,1,9,1,9,9,9,1,9,1,9},
-		        {0,0,0,0,0,6,1,9,9,1,2,1,1,1,9,1,1,1,9},
-		        {0,0,0,0,0,6,1,9,9,9,9,2,9,1,9,9,9,9,9},
-		        {0,0,0,0,0,9,1,1,1,1,1,1,9,1,1,1,1,1,9},
-		        {0,0,0,0,9,9,6,6,6,9,9,9,9,3,9,9,9,1,9},
-		        {0,0,0,0,0,0,0,0,0,9,1,1,1,1,1,1,9,1,9},
-		        {0,0,0,0,0,0,0,0,0,9,1,9,9,6,9,1,9,1,9},
-		        {0,0,0,0,0,0,0,0,0,9,1,1,9,0,9,1,1,1,9},
-		        {0,0,0,0,0,0,0,0,0,0,9,1,9,9,9,9,9,9,9},
-		        {0,0,0,0,0,0,0,0,0,0,9,2,1,1,1,1,1,1,9},
-		        {0,0,0,0,0,0,0,0,0,0,9,1,0,0,0,0,0,0,9},
-		        {0,0,0,0,0,0,0,0,0,0,9,1,0,0,0,0,0,0,9},
-		        {0,0,0,0,0,0,0,0,0,0,9,9,0,0,0,0,0,0,9},
-		        {0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,9,9,9,9} };
+		// Downloading map from stages.java
+		int[][] map = maps.map1;
 		
 		gc.playSound(sstart);
 		gc.playSoundLoop(music);
 		
+		while (true) {
+			
 		while (Life > 0) {
+			
 			synchronized (gc) {
 
 				// Clearing Console
@@ -134,29 +107,29 @@ public class main {
 					for (int col = 0; col < map[0].length; col++) {
 						if (map[row][col] == 0) {
 							gc.setColor(Color.BLACK);
-							gc.fillRect(col * 36, row * 36, 36, 36);
+							gc.fillRect(col * pixel, row * pixel, pixel, pixel);
 						}
 						if (map[row][col] == 9) {
 
-							gc.drawImage(wall1, col * 36, row * 36, 36, 36);
+							gc.drawImage(wall1, col * pixel, row * pixel, pixel, pixel);
 						}
 						if (map[row][col] == 1) {
-							gc.drawImage(dot, col * 36, row * 36, 36, 36);
+							gc.drawImage(dot, col * pixel, row * pixel, pixel, pixel);
 						}
 						if (map[row][col] == 2) {
-							gc.drawImage(coin, col * 36, row * 36, 36, 36);
+							gc.drawImage(coin, col * pixel, row * pixel, pixel, pixel);
 						}
 						if (map[row][col] == 3) {
-							gc.drawImage(star, col * 36, row * 36, 36, 36);
+							gc.drawImage(star, col * pixel, row * pixel, pixel, pixel);
 						}
 						if (map[row][col] == 4) {
-							gc.drawImage(exit, col * 36, row * 36, 36, 36);
+							gc.drawImage(exit, col * pixel, row * pixel, pixel, pixel);
 						}
 						if (map[row][col] == 5) {
-							gc.drawImage(spike, col * 36, row * 36, 36, 36);
+							gc.drawImage(spike, col * pixel, row * pixel, pixel, pixel);
 						}
 						if (map[row][col] == 6) {
-							gc.drawImage(spiketrap, col * 36, row * 36, 36, 36);
+							gc.drawImage(spiketrap, col * pixel, row * pixel, pixel, pixel);
 						}
 						if (map[Masky][Maskx] == 1) {
 							map[Masky][Maskx] = 0;
@@ -184,7 +157,7 @@ public class main {
 					}
 				}
 
-				gc.drawImage(mask, Maskx * 36, Masky * 36, 36, 36);
+				gc.drawImage(mask, Maskx * pixel, Masky * pixel, pixel, pixel);
 
 			}
 
@@ -192,25 +165,18 @@ public class main {
 
 			// User Input
 			if (Jump == false) {
-				if (gc.isKeyDown('W')) {
+				Maskw = false;
+				Maska = false;
+				Masks = false;
+				Maskd = false;
+				
+				if (gc.isKeyDown('W') || gc.isKeyDown(GraphicsConsole.VK_UP)) {
 					Maskw = true;
-					Maska = false;
-					Masks = false;
-					Maskd = false;
-				} else if (gc.isKeyDown('A')) {
-					Maskw = false;
+				} else if (gc.isKeyDown('A') || gc.isKeyDown(GraphicsConsole.VK_LEFT)) {
 					Maska = true;
-					Masks = false;
-					Maskd = false;
-				} else if (gc.isKeyDown('S')) {
-					Maskw = false;
-					Maska = false;
+				} else if (gc.isKeyDown('S') || gc.isKeyDown(GraphicsConsole.VK_DOWN)) {						
 					Masks = true;
-					Maskd = false;
-				} else if (gc.isKeyDown('D')) {
-					Maskw = false;
-					Maska = false;
-					Masks = false;
+				} else if (gc.isKeyDown('D') || gc.isKeyDown(GraphicsConsole.VK_RIGHT)) {
 					Maskd = true;
 				}
 			}
@@ -289,7 +255,7 @@ public class main {
 				}
 			}
 			
-			// Checker
+			// State
 			
 			if (Finish) {
 				break;
@@ -303,14 +269,46 @@ public class main {
 		}
 		
 		while (Finish) {
-			
+			if (map == maps.map1) {
+				Maskx = 11;
+				Masky = 4;
+				map = maps.map2;
+			}
+			else if (map == maps.map2) {
+				Maskx = 4;
+				Masky = 5;
+				map = maps.map3;
+			}
+			else if (map == maps.map3) {
+				Maskx = 3;
+				Masky = 43;
+				map = maps.map4;
+			}
+			else if (map == maps.map4) {
+				Maskx = 17;
+				Masky = 25;
+				map = maps.map5;
+			}
+			else if (map == maps.map5) {
+				Maskx = 15;
+				Masky = 26;
+				map = maps.map6;
+			}
+			else if (map == maps.map6) {
+				Maskx = 12;
+				Masky = 28;
+				map = maps.map1;
+			}
+			Finish = false;
+			break;
 		}
 		
 		while (Dead) {
-			gc.fillRect(Maskx * 36, Masky * 36, 36, 36);
+			
 			
 			
 		}
+	}
 		
 
 	}
