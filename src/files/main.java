@@ -5,47 +5,17 @@ import java.awt.*;
 import javax.sound.sampled.Clip;
 
 public class main {
+	
 	public static void main(String[] args) throws InterruptedException {
 
 		new main();
+		
 
 	}
 
-	GraphicsConsole gc = new GraphicsConsole(1000, 750, "Tomb of the Mask");
+	static GraphicsConsole gc = new GraphicsConsole(26 * 12, 47 * 12, "Tomb of the Mask");
 
 	main() throws InterruptedException {
-
-		Image coin, dot, entrance, exit, mask, spike, spiketrap, star, wall1, wall2;
-		coin = Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource("sources/coin.png"));
-		dot = Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource("sources/dot.png"));
-		entrance = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/entrance.png"));
-		exit = Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource("sources/exit.png"));
-		mask = Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource("sources/mask.png"));
-		spike = Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource("sources/spike.png"));
-		spiketrap = Toolkit.getDefaultToolkit()
-				.getImage(gc.getClass().getClassLoader().getResource("sources/spike trap.png"));
-		star = Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource("sources/star.png"));
-		wall1 = Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource("sources/wall1.png"));
-		wall2 = Toolkit.getDefaultToolkit().getImage(gc.getClass().getClassLoader().getResource("sources/wall2.png"));
-
-		Clip music, sstar1, sstar2, sstar3, scoin, sstar, sdeath, sexit, sjump, sland, sscore_count, sshield, sspikein,
-				sspikeout, sstart, entity;
-		music = gc.loadSound("sources/main.wav");
-		sstar1 = gc.loadSound("sources/1-star.wav");
-		sstar2 = gc.loadSound("sources/2-star.wav");
-		sstar3 = gc.loadSound("sources/3-star.wav");
-		scoin = gc.loadSound("sources/coin.wav");
-		sstar = gc.loadSound("sources/star.wav");
-		sdeath = gc.loadSound("sources/death.wav");
-		sexit = gc.loadSound("sources/win.wav");
-		sjump = gc.loadSound("sources/jump.wav");
-		sland = gc.loadSound("sources/landing.wav");
-		sscore_count = gc.loadSound("sources/score-count.wav");
-		sshield = gc.loadSound("sources/shield.wav");
-		sspikein = gc.loadSound("sources/spikesinwalls-attack.wav");
-		sspikeout = gc.loadSound("sources/spikesinwalls-on-off.wav");
-		sstart = gc.loadSound("sources/start.wav");
 
 		gc.setLocationRelativeTo(null);
 
@@ -55,41 +25,61 @@ public class main {
 		int ticks = 0;
 		int seconds = 0;
 
-		Boolean Start = true;
-		Boolean Finish = false;
+		Boolean Start = false;
+		Boolean Finish = true;
 		Boolean Dead = false;
+		Boolean Shield = false;
 		int Life = 1;
 
-		int Maskx;
-		// Maskx = 17;
-		Maskx = 5;
-		int Masky;
-		// Masky = 29;
-		Masky = 44;
+		int Maskx = 0;
+		int Masky = 0;
 
 		int Dot = 0;
 		int Star = 0;
 		int Coin = 0;
+		int Balance = 0;
+
+		Boolean Audio = true;
 
 		// 1 = up; 2 = left; 3 = down; 4 = right;
 		int MaskD = 0;
 		Boolean Move = false;
 
-		Boolean Lava = true;
+		Boolean Lava = false;
 		int LavaSpeed = 1;
-		int Lavay = 750;
-
-		stages maps = new stages();
+		int Lavay = 650;
 
 		gc.setBackgroundColor(Color.BLACK);
+		
+		
+		stages maps = new stages();
+		int[][] map = maps.map3;
 
-		int[][] map = maps.map4;
-
+		if (map == maps.map1) {
+			Maskx = 17;
+			Masky = 36;
+		} else if (map == maps.map2) {
+			Maskx = 14;
+			Masky = 16;
+		} else if (map == maps.map3) {
+			Maskx = 5;
+			Masky = 20;
+		} else if (map == maps.map4) {
+			Maskx = 5;
+			Masky = 44;
+		} else if (map == maps.map5) {
+			Maskx = 19;
+			Masky = 34;
+		} else if (map == maps.map6) {
+			Maskx = 19;
+			Masky = 35;
+		}
 		// gc.playSound(sstart);
 		// gc.playSoundLoop(music);
 
 		while (true) {
 			while (Start) {
+
 				synchronized (gc) {
 
 					// Clearing Console
@@ -98,39 +88,41 @@ public class main {
 					// Drawing Objects
 					for (int row = 0; row < map.length; row++) {
 						for (int col = 0; col < map[0].length; col++) {
-
 							switch (map[row][col]) {
 							case 1:
-								gc.drawImage(dot, col * pixel, row * pixel, pixel, pixel);
+								gc.drawImage(assets.dot, col * pixel, row * pixel, pixel, pixel);
 								break;
 							case 2:
-								gc.drawImage(coin, col * pixel, row * pixel, pixel, pixel);
+								gc.drawImage(assets.coin, col * pixel, row * pixel, pixel, pixel);
 								break;
 							case 3:
-								gc.drawImage(star, col * pixel, row * pixel, pixel, pixel);
+								gc.drawImage(assets.star, col * pixel, row * pixel, pixel, pixel);
 								break;
 							case 4:
-								gc.drawImage(exit, col * pixel, row * pixel, pixel, pixel);
+								gc.drawImage(assets.exit, col * pixel, row * pixel, pixel, pixel);
 								break;
 							case 5:
-								gc.drawImage(spike, col * pixel, row * pixel, pixel, pixel);
+								gc.drawImage(assets.spike, col * pixel, row * pixel, pixel, pixel);
 								break;
 							case 6:
-								gc.drawImage(spiketrap, col * pixel, row * pixel, pixel, pixel);
+								gc.drawImage(assets.spiketrap, col * pixel, row * pixel, pixel, pixel);
 								break;
 							// case 7: gc.drawImage(spikeactive, col * pixel, row * pixel, pixel, pixel);
 							// break;
 							// case 8: gc.drawImage(bat, col * pixel, row * pixel, pixel, pixel); break;
 							// break;
 							case 9:
-								gc.drawImage(wall1, col * pixel, row * pixel, pixel, pixel);
+								if (map == maps.map6)
+									gc.drawImage(assets.wall2, col * pixel, row * pixel, pixel, pixel);
+								else
+									gc.drawImage(assets.wall1, col * pixel, row * pixel, pixel, pixel);
 								break;
 							}
 						}
 					}
 
 					// gc.drawImage(entrance,Maskx * pixel, Masky * pixel);
-					gc.drawImage(mask, Maskx * pixel, Masky * pixel, pixel, pixel);
+					gc.drawImage(assets.mask, Maskx * pixel, Masky * pixel, pixel, pixel);
 
 					if (Lava) {
 						if (ticks % 20 == 0) {
@@ -171,21 +163,25 @@ public class main {
 				}
 				// Enter to buy shield
 				if (gc.isKeyDown(GraphicsConsole.VK_ENTER)) {
-					if (Life == 1 && ((Dot + (Coin * 5) + (Star * 10)) >= 100)) {
+					if (Life == 1 && (Balance >= 100) && Shield == false) {
 						Life++;
+						System.out.println("SHIELD ++ " + Life);
+						Balance -= 100;
+						Shield = true;
 					}
 				}
 				// ESC to pause
 				if (gc.isKeyDown(GraphicsConsole.VK_ESCAPE)) {
 					// M to mute
 					if (gc.isKeyDown('M')) {
-
+						Audio = false;
 					}
 				}
 
 				// Updates
 				if (Move) {
 					switch (MaskD) {
+					case 0: 
 					case 1:
 						Masky--;
 						break;
@@ -204,62 +200,79 @@ public class main {
 				ticks++;
 				if (ticks % (1000 / delay) == 0) {
 					seconds++;
-					System.out.println(seconds);
+					System.out.println("-------------------------" + seconds);
+					System.out.println("X: " + Maskx);
+					System.out.println("Y: " + Masky);
+					System.out.println("$: " + Balance);
+					System.out.println("L: " + Life);
 				}
 
 				// Collision Detection
 				if (map[Masky][Maskx] == 1) {
 					map[Masky][Maskx] = 0;
+					Balance ++;
 					Dot++;
 				} else if (map[Masky][Maskx] == 2) {
 					map[Masky][Maskx] = 0;
+					Balance += 5;
 					Coin++;
-					gc.playSound(scoin);
+					if (Audio)
+						gc.playSound(assets.scoin);
 				} else if (map[Masky][Maskx] == 3) {
 					map[Masky][Maskx] = 0;
+					Balance += 10;
 					Star++;
-					gc.playSound(sstar);
+					if (Audio)
+						gc.playSound(assets.sstar);
 				} else if (map[Masky][Maskx] == 4) {
 					Finish = true;
 					map[Masky][Maskx] = 0;
-					Move = false;
-					gc.playSound(sexit);
+					if (Audio)
+						gc.playSound(assets.sexit);
 				}
 
-				if (Lavay <= (Masky * pixel + pixel)) {
+				if (Lavay <= (Masky * pixel)) {
 					Life--;
 				}
 
 				if (MaskD == 1) {
 					if (map[Masky - 1][Maskx] != 9 && map[Masky - 1][Maskx] != 6 && map[Masky - 1][Maskx] != 5) {
 						Move = true;
-					} else if (map[Masky - 1][Maskx] == 5 || map[Masky - 1][Maskx] == 7)
+					} else if (map[Masky - 1][Maskx] == 5 || map[Masky - 1][Maskx] == 7) {
 						Life--;
-					else {
+						Shield = false;
+						MaskD = 0;
+					} else {
 						Move = false;
 					}
 				} else if (MaskD == 2) {
 					if (map[Masky][Maskx - 1] != 9 && map[Masky][Maskx - 1] != 6 && map[Masky][Maskx - 1] != 5) {
 						Move = true;
-					} else if (map[Masky][Maskx - 1] == 5 || map[Masky][Maskx - 1] == 7)
+					} else if (map[Masky][Maskx - 1] == 5 || map[Masky][Maskx - 1] == 7) {
 						Life--;
-					else {
+						Shield = false;
+						MaskD = 0;
+					} else {
 						Move = false;
 					}
 				} else if (MaskD == 3) {
 					if (map[Masky + 1][Maskx] != 9 && map[Masky + 1][Maskx] != 6 && map[Masky + 1][Maskx] != 5) {
 						Move = true;
-					} else if ((map[Masky + 1][Maskx] == 5 || map[Masky + 1][Maskx] == 7))
+					} else if ((map[Masky + 1][Maskx] == 5 || map[Masky + 1][Maskx] == 7)) {
 						Life--;
-					else {
+						Shield = false;
+						MaskD = 0;
+					} else {
 						Move = false;
 					}
 				} else if (MaskD == 4) {
 					if (map[Masky][Maskx + 1] != 9 && map[Masky][Maskx + 1] != 6 && map[Masky][Maskx + 1] != 5) {
 						Move = true;
-					} else if ((map[Masky][Maskx + 1] == 5 || map[Masky][Maskx + 1] == 7))
+					} else if ((map[Masky][Maskx + 1] == 5 || map[Masky][Maskx + 1] == 7)) {
 						Life--;
-					else {
+						Shield = false;
+						MaskD = 0;
+					} else {
 						Move = false;
 					}
 				}
@@ -269,38 +282,40 @@ public class main {
 				// Map Transition (for tester)
 				if (map == maps.map1) {
 					Maskx = 14;
-					Masky = 5;
+					Masky = 16;
 					map = maps.map2;
-					System.out.println("Stage2");
+					System.out.println("Stage2---------------------");
 				} else if (map == maps.map2) {
 					Maskx = 5;
-					Masky = 6;
+					Masky = 20;
 					map = maps.map3;
-					System.out.println("Stage3");
+					System.out.println("Stage3---------------------");
 				} else if (map == maps.map3) {
 					Maskx = 5;
 					Masky = 44;
 					map = maps.map4;
 					Lava = true;
-					System.out.println("Stage4 ++ LAVA");
+					System.out.println("Stage4---------------------");
 				} else if (map == maps.map4) {
 					Maskx = 19;
-					Masky = 26;
+					Masky = 34;
 					map = maps.map5;
 					Lava = false;
-					System.out.println("Stage5");
+					Lavay = 650;
+					System.out.println("Stage5---------------------");
 				} else if (map == maps.map5) {
-					Maskx = 18;
-					Masky = 27;
+					Maskx = 19;
+					Masky = 35;
 					map = maps.map6;
-					System.out.println("Stage6");
+					System.out.println("Stage6---------------------");
 				} else if (map == maps.map6) {
 					Maskx = 17;
-					Masky = 29;
+					Masky = 36;
 					map = maps.map1;
-					System.out.println("Stage1");
+					System.out.println("Stage1---------------------");
 				}
 				Finish = false;
+				Start = true;
 				// gc.playSound(sstart);
 				break;
 			}
