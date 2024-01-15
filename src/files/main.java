@@ -20,9 +20,12 @@ public class main {
 
 		gc.setLocationRelativeTo(null);
 
-		int lvly = 75;
-		int lvlw = 60;
-		int pixel = 12;
+		final int shieldh = 8 * 12;
+		final int shieldw = 36 * 12;
+		final int lvlw = 75;
+		final int lvlh = 60;
+		final int pixel = 36;
+		final int pixelstart = 12;
 
 		int delay = 15;
 		int ticks = 0;
@@ -69,25 +72,6 @@ public class main {
 		stages maps = new stages();
 		int[][] map = maps.map1;
 
-		if (map == maps.map1) {
-			Maskx = 17;
-			Masky = 36;
-		} else if (map == maps.map2) {
-			Maskx = 14;
-			Masky = 16;
-		} else if (map == maps.map3) {
-			Maskx = 5;
-			Masky = 20;
-		} else if (map == maps.map4) {
-			Maskx = 5;
-			Masky = 44;
-		} else if (map == maps.map5) {
-			Maskx = 19;
-			Masky = 34;
-		} else if (map == maps.map6) {
-			Maskx = 19;
-			Masky = 35;
-		}
 		// gc.playSound(sstart);
 		// gc.playSoundLoop(music);
 
@@ -139,8 +123,13 @@ public class main {
 
 							case 10:
 								gc.setColor(Color.WHITE);
-								gc.fillRect(col * pixel - xoffset, row * pixel - yoffset, lvly, lvlw);
+								gc.fillRect(col * pixelstart, row * pixelstart, lvlw, lvlh);
 								break;
+							case 11:
+								gc.setColor(Color.WHITE);
+								gc.fillRect(col * pixelstart, row * pixelstart, shieldw, shieldh);
+								break;
+
 							}
 						}
 					}
@@ -150,11 +139,16 @@ public class main {
 						gc.drawImage(assets.mask, Maskx * pixel - xoffset, Masky * pixel - yoffset, pixel, pixel);
 					}
 
-					/*
-					 * if (Lava) { if (ticks % 20 == 0) { gc.setColor(Color.CYAN); } else if (ticks
-					 * % 10 == 0) { gc.setColor(Color.MAGENTA); } gc.fillRect(0, Lavay, 1000, 750);
-					 * if (ticks % 2 == 0) Lavay -= LavaSpeed; }
-					 */
+					if (Lava) {
+						if (ticks % 20 == 0) {
+							gc.setColor(Color.CYAN);
+						} else if (ticks % 10 == 0) {
+							gc.setColor(Color.MAGENTA);
+						}
+						gc.fillRect(0, Lavay, 1000, 750);
+						if (ticks % 2 == 0)
+							Lavay -= LavaSpeed;
+					}
 
 					if (Finish) {
 						break;
@@ -253,9 +247,11 @@ public class main {
 						break;
 					}
 
-					if (Lavay <= (Masky * pixel)) {
-						Life--;
-					}
+					
+					 //if (Lavay >= (Masky * pixel)) { 
+						// Life--; 
+						 //}
+					 
 
 					if (MaskD == 1) {
 						if (map[Masky - 1][Maskx] != 9 && map[Masky - 1][Maskx] != 6 && map[Masky - 1][Maskx] != 5) {
@@ -327,68 +323,42 @@ public class main {
 							yoffset = YBLOCKS * pixel - mapY;
 					}
 				}
-				gc.setCursor(10, 10);
-				mouseclick = gc.getMouseClick();
 
-				if ((mouseclick != 0) && (4 * pixel < gc.getMouseX()) && (gc.getMouseX() < 5 * pixel + lvlw)
-						&& (13 * pixel < gc.getMouseY()) && (gc.getMouseY() < 13 * pixel + lvly)) {
-					// if (mouseclick != 0) {
-					System.out.printf("location is" + mouseclick);
-					map = maps.map1;
-					DrawMask = true;
-					if (map == maps.map1) {
-						Maskx = 17;
-						Masky = 36;
-					}
-
-				} else if ((mouseclick != 0) && (4 * pixel < gc.getMouseX()) && (gc.getMouseX() < 5 * pixel + lvlw)
-						&& (23 * pixel < gc.getMouseY()) && (gc.getMouseY() < 23 * pixel + lvly)) {
-					System.out.printf("location is" + mouseclick);
-					map = maps.map2;
-					DrawMask = true;
-					if (map == maps.map2) {
-						Maskx = 14;
-						Masky = 16;
-					}
-				} else if ((mouseclick != 0) && (15 * pixel < gc.getMouseX()) && (gc.getMouseX() < 16 * pixel + lvlw)
-						&& (23 * pixel < gc.getMouseY()) && (gc.getMouseY() < 23 * pixel + lvly)) {
-					System.out.printf("location is" + mouseclick);
-					map = maps.map3;
-					DrawMask = true;
-					if (map == maps.map3) {
-						Maskx = 5;
-						Masky = 20;
-					}
-				} else if ((mouseclick != 0) && (15 * pixel < gc.getMouseX()) && (gc.getMouseX() < 16 * pixel + lvlw)
-						&& (13 * pixel < gc.getMouseY()) && (gc.getMouseY() < 13 * pixel + lvly)) {
-					System.out.printf("location is" + mouseclick);
-					map = maps.map4;
-					DrawMask = true;
-					if (map == maps.map4) {
-						Maskx = 5;
-						Masky = 44;
-					}
-				} else if ((mouseclick != 0) && (26 * pixel < gc.getMouseX()) && (gc.getMouseX() < 27 * pixel + lvlw)
-						&& (13 * pixel < gc.getMouseY()) && (gc.getMouseY() < 13 * pixel + lvly)) {
-					System.out.printf("location is" + mouseclick);
-					map = maps.map5;
-					DrawMask = true;
-					if (map == maps.map5) {
-						Maskx = 19;
-						Masky = 34;
-					}
-				} else if ((mouseclick != 0) && (26 * pixel < gc.getMouseX()) && (gc.getMouseX() < 27 * pixel + lvlw)
-						&& (23 * pixel < gc.getMouseY()) && (gc.getMouseY() < 23 * pixel + lvly)) {
-					System.out.printf("location is" + mouseclick);
-					map = maps.map6;
-					DrawMask = true;
-					if (map == maps.map6) {
-						Maskx = 19;
-						Masky = 35;
+				if (map == maps.start) {
+					gc.setCursor(10, 10);
+					
+					int[][] nextLevel = levelSelect(gc.getMouseClick(), pixelstart, lvlw, lvlh);
+					if (nextLevel != null) {
+						map = nextLevel;
+						DrawMask = true;
+						if (map == stages.map1) {
+							Maskx = 17;
+							Masky = 36;
+						}
+						if (map == stages.map2) {
+							Maskx = 14;
+							Masky = 16;
+						}
+						if (map == stages.map3) {
+							Maskx = 5;
+							Masky = 20;
+						}
+						if (map == stages.map4) {
+							Maskx = 5;
+							Masky = 44;
+						}
+						if (map == stages.map5) {
+							Maskx = 19;
+							Masky = 34;
+						}
+						if (map == stages.map6) {
+							Maskx = 19;
+							Masky = 35;
+						}
 					}
 				}
-
 			}
+
 			while (Finish) {
 				MaskD = 0;
 				Move = false;
@@ -428,11 +398,42 @@ public class main {
 
 			while (Dead) {
 				// gc.getChar();
+				System.out.println("dead");
 				break;
+
 			}
 
 		}
 
+	}
+
+	static int[][] levelSelect(int mouseclick, int pixelstart, int lvlw, int lvlh) {
+		int[][] map = null;
+		if (mouseclick == 0) {
+			return map;
+		}
+		int mouseX = gc.getMouseX();
+		int mouseY = gc.getMouseY();
+		if ((4 * pixelstart < mouseX) && (mouseX < 5 * pixelstart + lvlw) && (13 * pixelstart < mouseY)
+				&& (mouseY < 14 * pixelstart + lvlh)) {
+			map = stages.map1;
+		} else if ((4 * pixelstart < mouseX) && (mouseX < 5 * pixelstart + lvlw) && (22 * pixelstart < mouseY)
+				&& (mouseY < 23 * pixelstart + lvlh)) {
+			map = stages.map2;
+		} else if ((15 * pixelstart < mouseX) && (mouseX < 16 * pixelstart + lvlw) && (22 * pixelstart < mouseY)
+				&& (mouseY < 23 * pixelstart + lvlh)) {
+			map = stages.map3;
+		} else if ((15 * pixelstart < mouseX) && (mouseX < 16 * pixelstart + lvlw) && (12 * pixelstart < mouseY)
+				&& (mouseY < 13 * pixelstart + lvlh)) {
+			map = stages.map4;
+		} else if ((26 * pixelstart < mouseX) && (mouseX < 27 * pixelstart + lvlw) && (12 * pixelstart < mouseY)
+				&& (mouseY < 13 * pixelstart + lvlh)) {
+			map = stages.map5;
+		} else if ((26 * pixelstart < mouseX) && (mouseX < 27 * pixelstart + lvlw) && (22 * pixelstart < mouseY)
+				&& (mouseY < 23 * pixelstart + lvlh)) {
+			map = stages.map6;
+		}
+		return map;
 	}
 
 }
