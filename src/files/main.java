@@ -22,14 +22,19 @@ public class main {
 
 		final int shieldh = 8 * 12;
 		final int shieldw = 36 * 12;
-		final int lvlw = 75;
-		final int lvlh = 60;
+		final int lvlw = 64;
+		final int lvlh = 64;
 		final int pixel = 36;
 		final int pixelstart = 12;
 
-		int delay = 15;
+		int delay = 20;
 		int ticks = 0;
 		int seconds = 0;
+		int maskticks = 1;
+		Boolean SFX = true;
+		int animationticks = 1;
+		int spiketicks = 0;
+		Boolean Spike = false;
 
 		int MARGIN = 5 * pixel;
 		int XBLOCKS = 26;
@@ -47,10 +52,7 @@ public class main {
 		int Maskx = 0;
 		int Masky = 0;
 
-		int Dot = 0;
-		int Star = 0;
-		int Coin = 0;
-		int Balance = 0;
+		int Balance = 100;
 
 		int mouseclick = 0;
 		gc.enableMouse();
@@ -65,15 +67,14 @@ public class main {
 
 		Boolean Lava = false;
 		int LavaSpeed = 1;
-		int Lavay = 650;
+		int Lavay = mapY;
 
 		gc.setBackgroundColor(Color.BLACK);
 
 		stages maps = new stages();
-		int[][] map = maps.map1;
+		int[][] map = maps.start;
 
-		// gc.playSound(sstart);
-		// gc.playSoundLoop(music);
+		gc.playSoundLoop(assets.smusic);
 
 		while (true) {
 			while (Start) {
@@ -98,6 +99,7 @@ public class main {
 								break;
 							case 4:
 								gc.drawImage(assets.exit, col * pixel - xoffset, row * pixel - yoffset, pixel, pixel);
+								Lava = false;
 								break;
 							case 5:
 								gc.drawImage(assets.spike, col * pixel - xoffset, row * pixel - yoffset, pixel, pixel);
@@ -106,10 +108,13 @@ public class main {
 								gc.drawImage(assets.spiketrap, col * pixel - xoffset, row * pixel - yoffset, pixel,
 										pixel);
 								break;
-							// case 7: gc.drawImage(spikeactive, col * pixel, row * pixel, pixel, pixel);
-							// break;
-							// case 8: gc.drawImage(bat, col * pixel, row * pixel, pixel, pixel); break;
-							// break;
+							case 7:
+								gc.setColor(Color.WHITE);
+								gc.fillRect(col * pixel - xoffset, row * pixel - yoffset, pixel, pixel);
+								// gc.drawImage(spikeactive, col * pixel, row * pixel, pixel, pixel);
+								// break;
+								// case 8: gc.drawImage(bat, col * pixel, row * pixel, pixel, pixel); break;
+								// break;
 
 							case 9:
 								if (map == maps.map6)
@@ -122,23 +127,57 @@ public class main {
 								break;
 
 							case 10:
-								gc.setColor(Color.WHITE);
-								gc.fillRect(col * pixelstart, row * pixelstart, lvlw, lvlh);
+								gc.drawImage(assets.stage1, col * pixelstart, row * pixelstart, lvlw, lvlh);
+								break;
+							case 20:
+								gc.drawImage(assets.stage2, col * pixelstart, row * pixelstart, lvlw, lvlh);
+								break;
+							case 30:
+								gc.drawImage(assets.stage3, col * pixelstart, row * pixelstart, lvlw, lvlh);
+								break;
+							case 40:
+								gc.drawImage(assets.stage4, col * pixelstart, row * pixelstart, lvlw, lvlh);
+								break;
+							case 50:
+								gc.drawImage(assets.stage5, col * pixelstart, row * pixelstart, lvlw, lvlh);
+								break;
+							case 60:
+								gc.drawImage(assets.stage6, col * pixelstart, row * pixelstart, lvlw, lvlh);
+								break;
+							case 70:
+								gc.drawImage(assets.stages, col * pixelstart, row * pixelstart);
+								break;
+							case 80:
+								gc.drawImage(assets.enter, col * pixelstart, row * pixelstart);
+								break;
+							case 90:
+								gc.drawImage(assets.esc, col * pixelstart, row * pixelstart);
 								break;
 							case 11:
-								gc.setColor(Color.WHITE);
 								gc.fillRect(col * pixelstart, row * pixelstart, shieldw, shieldh);
 								break;
 
 							}
 						}
 					}
+					int centerX = Maskx * pixel - xoffset + (pixel / 2);
+					int centerY = Masky * pixel - yoffset + (pixel / 2);
 
-					// gc.drawImage(entrance,Maskx * pixel, Masky * pixel);
 					if (DrawMask == true) {
+						if (MaskD == 1) {
+							gc.setRotation(180, centerX, centerY);
+						} else if (MaskD == 2) {
+							gc.setRotation(90, centerX, centerY);
+						} else if (MaskD == 3) {
+							gc.setRotation(0, centerX, centerY);
+						} else if (MaskD == 4) {
+							gc.setRotation(270, centerX, centerY);
+						}
 						gc.drawImage(assets.mask, Maskx * pixel - xoffset, Masky * pixel - yoffset, pixel, pixel);
+						gc.clearRotation();
 					}
 
+					// Lava
 					if (Lava) {
 						if (ticks % 20 == 0) {
 							gc.setColor(Color.CYAN);
@@ -168,7 +207,6 @@ public class main {
 					if (Move == false) {
 						if (gc.isKeyDown('W') || gc.isKeyDown(GraphicsConsole.VK_UP)) {
 							MaskD = 1;
-							System.out.println("move");
 						} else if (gc.isKeyDown('A') || gc.isKeyDown(GraphicsConsole.VK_LEFT)) {
 							MaskD = 2;
 						} else if (gc.isKeyDown('S') || gc.isKeyDown(GraphicsConsole.VK_DOWN)) {
@@ -198,6 +236,8 @@ public class main {
 					if (Move) {
 						switch (MaskD) {
 						case 0:
+							Move = false;
+							break;
 						case 1:
 							Masky--;
 							break;
@@ -214,11 +254,91 @@ public class main {
 					}
 
 					ticks++;
-					if (true) {
+					if (ticks % (1000 / delay) == 0) {
 						seconds++;
-						// System.out.println("-------------------------" + seconds);
-						// System.out.println("xoffset: " + xoffset);
-						// System.out.println("yoffset: " + yoffset);
+						System.out.println("-------------------------" + seconds);
+						System.out.println("X: " + Maskx);
+						System.out.println("Y: " + Masky);
+						System.out.println("$: " + Balance);
+						System.out.println("L: " + Life);
+						System.out.println("Spiketicks: " + spiketicks);
+					}
+					if (ticks % (100 / delay) == 0) {
+						maskticks++;
+						animationticks++;
+						if (Spike)
+							spiketicks++;
+						if (spiketicks > 10)
+							spiketicks = 0;
+						SFX = true;
+					}
+					
+
+					if (animationticks > 4)
+						animationticks = 1;
+					if (animationticks == 4) {
+						assets.star = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/star4.png"));
+
+						assets.coin = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/coin4.png"));
+
+						assets.exit = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/exit3.png"));
+					} else if (animationticks == 3) {
+						assets.star = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/star3.png"));
+
+						assets.coin = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/coin3.png"));
+
+						assets.exit = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/exit3.png"));
+					} else if (animationticks == 2) {
+						assets.star = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/star2.png"));
+
+						assets.coin = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/coin2.png"));
+
+						assets.exit = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/exit2.png"));
+					} else if (animationticks == 1) {
+						assets.star = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/star1.png"));
+
+						assets.coin = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/coin1.png"));
+
+						assets.exit = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/exit1.png"));
+					}
+
+					if (Move == false) {
+						if (maskticks > 6)
+							maskticks = 1;
+						if (maskticks == 6) {
+							assets.mask = Toolkit.getDefaultToolkit()
+									.getImage(main.gc.getClass().getClassLoader().getResource("sources/mask6.png"));
+						} else if (maskticks == 5) {
+							assets.mask = Toolkit.getDefaultToolkit()
+									.getImage(main.gc.getClass().getClassLoader().getResource("sources/mask5.png"));
+						} else if (maskticks == 4) {
+							assets.mask = Toolkit.getDefaultToolkit()
+									.getImage(main.gc.getClass().getClassLoader().getResource("sources/mask4.png"));
+						} else if (maskticks == 3) {
+							assets.mask = Toolkit.getDefaultToolkit()
+									.getImage(main.gc.getClass().getClassLoader().getResource("sources/mask3.png"));
+						} else if (maskticks == 2) {
+							assets.mask = Toolkit.getDefaultToolkit()
+									.getImage(main.gc.getClass().getClassLoader().getResource("sources/mask2.png"));
+						} else if (maskticks == 1) {
+							assets.mask = Toolkit.getDefaultToolkit()
+									.getImage(main.gc.getClass().getClassLoader().getResource("sources/mask1.png"));
+						}
+					} else {
+						assets.mask = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/ball.png"));
 					}
 
 					// Collision Detection
@@ -226,17 +346,14 @@ public class main {
 					if (map[Masky][Maskx] == 1) {
 						map[Masky][Maskx] = 0;
 						Balance++;
-						Dot++;
 					} else if (map[Masky][Maskx] == 2) {
 						map[Masky][Maskx] = 0;
 						Balance += 5;
-						Coin++;
 						if (Audio)
 							gc.playSound(assets.scoin);
 					} else if (map[Masky][Maskx] == 3) {
 						map[Masky][Maskx] = 0;
 						Balance += 10;
-						Star++;
 						if (Audio)
 							gc.playSound(assets.sstar);
 					} else if (map[Masky][Maskx] == 4) {
@@ -247,15 +364,21 @@ public class main {
 						break;
 					}
 
-					
-					 //if (Lavay >= (Masky * pixel)) { 
-						// Life--; 
-						 //}
-					 
+					if ((map[Masky - 1][Maskx] == 6) || (map[Masky + 1][Maskx] == 6) || (map[Masky][Maskx - 1] == 6)
+							|| (map[Masky][Maskx + 1] == 6)) {
+						System.out.println("SPIKE");
+						Spike = true;
+
+					}
 
 					if (MaskD == 1) {
+
 						if (map[Masky - 1][Maskx] != 9 && map[Masky - 1][Maskx] != 6 && map[Masky - 1][Maskx] != 5) {
 							Move = true;
+							if (SFX) {
+								gc.playSound(assets.sjump);
+								SFX = false;
+							}
 						} else if (map[Masky - 1][Maskx] == 5 || map[Masky - 1][Maskx] == 7) {
 							Life--;
 							Shield = false;
@@ -266,6 +389,10 @@ public class main {
 					} else if (MaskD == 2) {
 						if (map[Masky][Maskx - 1] != 9 && map[Masky][Maskx - 1] != 6 && map[Masky][Maskx - 1] != 5) {
 							Move = true;
+							if (SFX) {
+								gc.playSound(assets.sjump);
+								SFX = false;
+							}
 						} else if (map[Masky][Maskx - 1] == 5 || map[Masky][Maskx - 1] == 7) {
 							Life--;
 							Shield = false;
@@ -276,6 +403,10 @@ public class main {
 					} else if (MaskD == 3) {
 						if (map[Masky + 1][Maskx] != 9 && map[Masky + 1][Maskx] != 6 && map[Masky + 1][Maskx] != 5) {
 							Move = true;
+							if (SFX) {
+								gc.playSound(assets.sjump);
+								SFX = false;
+							}
 						} else if ((map[Masky + 1][Maskx] == 5 || map[Masky + 1][Maskx] == 7)) {
 							Life--;
 							Shield = false;
@@ -286,6 +417,10 @@ public class main {
 					} else if (MaskD == 4) {
 						if (map[Masky][Maskx + 1] != 9 && map[Masky][Maskx + 1] != 6 && map[Masky][Maskx + 1] != 5) {
 							Move = true;
+							if (SFX) {
+								gc.playSound(assets.sjump);
+								SFX = false;
+							}
 						} else if ((map[Masky][Maskx + 1] == 5 || map[Masky][Maskx + 1] == 7)) {
 							Life--;
 							Shield = false;
@@ -326,11 +461,12 @@ public class main {
 
 				if (map == maps.start) {
 					gc.setCursor(10, 10);
-					
+
 					int[][] nextLevel = levelSelect(gc.getMouseClick(), pixelstart, lvlw, lvlh);
 					if (nextLevel != null) {
 						map = nextLevel;
 						DrawMask = true;
+						gc.playSound(assets.sstart);						
 						if (map == stages.map1) {
 							Maskx = 17;
 							Masky = 36;
@@ -344,6 +480,7 @@ public class main {
 							Masky = 20;
 						}
 						if (map == stages.map4) {
+							Lava = true;
 							Maskx = 5;
 							Masky = 44;
 						}
@@ -366,39 +503,39 @@ public class main {
 				// Map Transition (for tester)
 				if (map == maps.map1) {
 					map = maps.start;
+					maps.map1 = assets.ogmap1;
 					// System.out.println("Stage2---------------------");
 				} else if (map == maps.map2) {
 					map = maps.start;
+					maps.map2 = assets.ogmap2;
 					// System.out.println("Stage3---------------------");
 				} else if (map == maps.map3) {
 					map = maps.start;
-					Lava = true;
+					maps.map3 = assets.ogmap3;
 					// System.out.println("Stage4---------------------");
 				} else if (map == maps.map4) {
 					map = maps.start;
-					Lava = false;
-					Lavay = 650;
+					maps.map4 = assets.ogmap4;
 					// System.out.println("Stage5---------------------");
 				} else if (map == maps.map5) {
 					map = maps.start;
-
+					maps.map5 = assets.ogmap5;
 					// System.out.println("Stage6---------------------");
 				} else if (map == maps.map6) {
 					map = maps.start;
-
+					maps.map6 = assets.ogmap6;
 					// System.out.println("Stage1---------------------");
 				} else if (map == maps.start) {
 
 				}
 				Finish = false;
 				Start = true;
-				// gc.playSound(sstart);
 				break;
 			}
 
 			while (Dead) {
-				// gc.getChar();
 				System.out.println("dead");
+				gc.getChar();
 				break;
 
 			}
@@ -414,26 +551,25 @@ public class main {
 		}
 		int mouseX = gc.getMouseX();
 		int mouseY = gc.getMouseY();
-		if ((4 * pixelstart < mouseX) && (mouseX < 5 * pixelstart + lvlw) && (13 * pixelstart < mouseY)
-				&& (mouseY < 14 * pixelstart + lvlh)) {
+		if ((mouseclick <= 1) && (4 * pixelstart < mouseX) && (mouseX < 5 * pixelstart + lvlw)
+				&& (13 * pixelstart < mouseY) && (mouseY < 14 * pixelstart + lvlh)) {
 			map = stages.map1;
-		} else if ((4 * pixelstart < mouseX) && (mouseX < 5 * pixelstart + lvlw) && (22 * pixelstart < mouseY)
-				&& (mouseY < 23 * pixelstart + lvlh)) {
+		} else if ((mouseclick <= 1) && (4 * pixelstart < mouseX) && (mouseX < 5 * pixelstart + lvlw)
+				&& (22 * pixelstart < mouseY) && (mouseY < 23 * pixelstart + lvlh)) {
 			map = stages.map2;
-		} else if ((15 * pixelstart < mouseX) && (mouseX < 16 * pixelstart + lvlw) && (22 * pixelstart < mouseY)
-				&& (mouseY < 23 * pixelstart + lvlh)) {
+		} else if ((mouseclick <= 1) && (15 * pixelstart < mouseX) && (mouseX < 16 * pixelstart + lvlw)
+				&& (22 * pixelstart < mouseY) && (mouseY < 23 * pixelstart + lvlh)) {
 			map = stages.map3;
-		} else if ((15 * pixelstart < mouseX) && (mouseX < 16 * pixelstart + lvlw) && (12 * pixelstart < mouseY)
-				&& (mouseY < 13 * pixelstart + lvlh)) {
+		} else if ((mouseclick <= 1) && (15 * pixelstart < mouseX) && (mouseX < 16 * pixelstart + lvlw)
+				&& (12 * pixelstart < mouseY) && (mouseY < 13 * pixelstart + lvlh)) {
 			map = stages.map4;
-		} else if ((26 * pixelstart < mouseX) && (mouseX < 27 * pixelstart + lvlw) && (12 * pixelstart < mouseY)
-				&& (mouseY < 13 * pixelstart + lvlh)) {
+		} else if ((mouseclick <= 1) && (26 * pixelstart < mouseX) && (mouseX < 27 * pixelstart + lvlw)
+				&& (12 * pixelstart < mouseY) && (mouseY < 13 * pixelstart + lvlh)) {
 			map = stages.map5;
-		} else if ((26 * pixelstart < mouseX) && (mouseX < 27 * pixelstart + lvlw) && (22 * pixelstart < mouseY)
-				&& (mouseY < 23 * pixelstart + lvlh)) {
+		} else if ((mouseclick <= 1) && (26 * pixelstart < mouseX) && (mouseX < 27 * pixelstart + lvlw)
+				&& (22 * pixelstart < mouseY) && (mouseY < 23 * pixelstart + lvlh)) {
 			map = stages.map6;
 		}
 		return map;
 	}
-
 }
