@@ -20,8 +20,7 @@ public class main {
 
 		gc.setLocationRelativeTo(null);
 
-		final int shieldh = 8 * 12;
-		final int shieldw = 36 * 12;
+		
 		final int lvlw = 64;
 		final int lvlh = 64;
 		final int pixel = 36;
@@ -42,6 +41,7 @@ public class main {
 		int xoffset = 0;
 		int yoffset = 0;
 
+		Boolean pauseScreen1 = true;
 		Boolean Start = false;
 		Boolean Finish = true;
 		Boolean Dead = false;
@@ -59,7 +59,7 @@ public class main {
 		gc.enableMouseMotion();
 		gc.enableMouseWheel();
 
-		Boolean Audio = true;
+		Boolean Audio = false;
 
 		// 1 = up; 2 = left; 3 = down; 4 = right;
 		int MaskD = 0;
@@ -73,8 +73,10 @@ public class main {
 
 		stages maps = new stages();
 		int[][] map = maps.start;
+		
+		gc.setFont(new Font("Showcard Gothic", Font.BOLD, 25));
 
-		gc.playSoundLoop(assets.smusic);
+		// gc.playSoundLoop(assets.smusic);
 
 		while (true) {
 			while (Start) {
@@ -109,12 +111,13 @@ public class main {
 										pixel);
 								break;
 							case 7:
-								gc.setColor(Color.WHITE);
-								gc.fillRect(col * pixel - xoffset, row * pixel - yoffset, pixel, pixel);
-								// gc.drawImage(spikeactive, col * pixel, row * pixel, pixel, pixel);
-								// break;
-								// case 8: gc.drawImage(bat, col * pixel, row * pixel, pixel, pixel); break;
-								// break;
+								if (assets.spiketrap2 != null) {
+									gc.drawImage(assets.spiketrap2, col * pixel - xoffset, row * pixel - yoffset, pixel,
+											pixel);
+								}
+								break;
+							// case 8: gc.drawImage(bat, col * pixel, row * pixel, pixel, pixel); break;
+							// break;
 
 							case 9:
 								if (map == maps.map6)
@@ -153,9 +156,6 @@ public class main {
 							case 90:
 								gc.drawImage(assets.esc, col * pixelstart, row * pixelstart);
 								break;
-							case 11:
-								gc.fillRect(col * pixelstart, row * pixelstart, shieldw, shieldh);
-								break;
 
 							}
 						}
@@ -175,6 +175,15 @@ public class main {
 						}
 						gc.drawImage(assets.mask, Maskx * pixel - xoffset, Masky * pixel - yoffset, pixel, pixel);
 						gc.clearRotation();
+
+						gc.setColor(Color.BLACK);
+						gc.fillRect(0, 0, 3 * pixel, pixel);
+						gc.fillRect(11*pixel, 0, pixel, pixel);
+						gc.setColor(Color.YELLOW);
+						gc.drawImage(assets.pause, 11 * pixel, 0, pixel, pixel);
+						gc.drawImage(assets.coinicon,0,0,pixel,pixel);
+						gc.drawString(""+Balance, pixel+10, pixel-10);
+
 					}
 
 					// Lava
@@ -198,10 +207,12 @@ public class main {
 						Start = false;
 						break;
 					}
+					
 
 				}
 
 				Thread.sleep(delay);
+
 				if (map != maps.start) {
 					// User Input
 					if (Move == false) {
@@ -224,7 +235,46 @@ public class main {
 							Shield = true;
 						}
 					}
-					// ESC to pause
+					// Pause
+					mouseclick = gc.getMouseClick();
+					if ((mouseclick != 0) && (11 * pixel < gc.getMouseX()) && (gc.getMouseX() < 12 * pixel)
+							&& (0 * pixel < gc.getMouseY()) && (gc.getMouseY() < 1 * pixel)) {
+						System.out.println("pause " + mouseclick);
+						mouseclick = 0;
+						
+						while (true) {
+
+							mouseclick = gc.getMouseClick();
+							
+							if(pauseScreen1 == true) {
+							gc.setColor(Color.BLUE);
+							gc.fillRect(4* pixel, 10 * pixel, pixel, pixel);
+							gc.fillRect(7* pixel, 10 * pixel, pixel, pixel);
+							gc.setColor(Color.YELLOW);
+							gc.fillRect(3 * pixel, 3 * pixel, 6 * pixel, 10 * pixel);
+							}
+							if ((mouseclick != 0) && (4 * pixel < gc.getMouseX()) && (gc.getMouseX() < 5 * pixel)
+									&& (10 * pixel < gc.getMouseY()) && (gc.getMouseY() < 11 * pixel)) {
+								System.out.println("g " + mouseclick);
+								pauseScreen1 = false;
+								
+								gc.drawImage(assets.wasd,4* pixel, 10 * pixel, pixel, pixel );
+								
+							}
+							if ((mouseclick != 0) && (7 * pixel < gc.getMouseX()) && (gc.getMouseX() < 8 * pixel)
+									&& (10 * pixel < gc.getMouseY()) && (gc.getMouseY() < 11 * pixel)) {
+								Finish = true;
+								//break;
+							}
+							if ((mouseclick != 0) && (11 * pixel < gc.getMouseX()) && (gc.getMouseX() < 12 * pixel)
+									&& (0 * pixel < gc.getMouseY()) && (gc.getMouseY() < 1 * pixel)) {
+								System.out.println("k " + mouseclick);
+								
+								//break;
+							}
+							
+					}
+					}
 					if (gc.isKeyDown(GraphicsConsole.VK_ESCAPE)) {
 						// M to mute
 						if (gc.isKeyDown('M')) {
@@ -262,6 +312,7 @@ public class main {
 						System.out.println("$: " + Balance);
 						System.out.println("L: " + Life);
 						System.out.println("Spiketicks: " + spiketicks);
+						System.out.println("Mouse: " + mouseclick);
 					}
 					if (ticks % (100 / delay) == 0) {
 						maskticks++;
@@ -272,11 +323,23 @@ public class main {
 							spiketicks = 0;
 						SFX = true;
 					}
-					
+					switch (spiketicks) {
 
+					case 10:
+						assets.spiketrap2 = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/spike trap3.png"));
+
+					case 5:
+						assets.spiketrap2 = Toolkit.getDefaultToolkit()
+								.getImage(main.gc.getClass().getClassLoader().getResource("sources/spike trap2.png"));
+
+					default:
+						break;
+					}
 					if (animationticks > 4)
 						animationticks = 1;
-					if (animationticks == 4) {
+					switch (animationticks) {
+					case 4:
 						assets.star = Toolkit.getDefaultToolkit()
 								.getImage(main.gc.getClass().getClassLoader().getResource("sources/star4.png"));
 
@@ -285,7 +348,8 @@ public class main {
 
 						assets.exit = Toolkit.getDefaultToolkit()
 								.getImage(main.gc.getClass().getClassLoader().getResource("sources/exit3.png"));
-					} else if (animationticks == 3) {
+
+					case 3:
 						assets.star = Toolkit.getDefaultToolkit()
 								.getImage(main.gc.getClass().getClassLoader().getResource("sources/star3.png"));
 
@@ -294,7 +358,7 @@ public class main {
 
 						assets.exit = Toolkit.getDefaultToolkit()
 								.getImage(main.gc.getClass().getClassLoader().getResource("sources/exit3.png"));
-					} else if (animationticks == 2) {
+					case 2:
 						assets.star = Toolkit.getDefaultToolkit()
 								.getImage(main.gc.getClass().getClassLoader().getResource("sources/star2.png"));
 
@@ -303,7 +367,8 @@ public class main {
 
 						assets.exit = Toolkit.getDefaultToolkit()
 								.getImage(main.gc.getClass().getClassLoader().getResource("sources/exit2.png"));
-					} else if (animationticks == 1) {
+
+					case 1:
 						assets.star = Toolkit.getDefaultToolkit()
 								.getImage(main.gc.getClass().getClassLoader().getResource("sources/star1.png"));
 
@@ -362,13 +427,6 @@ public class main {
 						if (Audio)
 							gc.playSound(assets.sexit);
 						break;
-					}
-
-					if ((map[Masky - 1][Maskx] == 6) || (map[Masky + 1][Maskx] == 6) || (map[Masky][Maskx - 1] == 6)
-							|| (map[Masky][Maskx + 1] == 6)) {
-						System.out.println("SPIKE");
-						Spike = true;
-
 					}
 
 					if (MaskD == 1) {
@@ -430,6 +488,14 @@ public class main {
 						}
 					}
 
+					if ((map[Masky - 1][Maskx] == 6) || (map[Masky + 1][Maskx] == 6) || (map[Masky][Maskx - 1] == 6)
+							|| (map[Masky][Maskx + 1] == 6)) {
+						System.out.println("SPIKE");
+						Spike = true;
+						map[Masky][Maskx] = 7;
+
+					}
+
 					// Scroll the screen up/down/left/right to keep the character on-screen
 
 					int xposition = Maskx * pixel;
@@ -466,12 +532,12 @@ public class main {
 					if (nextLevel != null) {
 						map = nextLevel;
 						DrawMask = true;
-						gc.playSound(assets.sstart);						
-						if (map == stages.map1) {
+						// gc.playSound(assets.sstart);
+						if (map == maps.map1) {
 							Maskx = 17;
-							Masky = 36;
+							Masky = 35;
 						}
-						if (map == stages.map2) {
+						if (map == maps.map2) {
 							Maskx = 14;
 							Masky = 16;
 						}
@@ -503,27 +569,27 @@ public class main {
 				// Map Transition (for tester)
 				if (map == maps.map1) {
 					map = maps.start;
-					maps.map1 = assets.ogmap1;
+					maps.map1 = resetLevel(assets.ogmap1);
 					// System.out.println("Stage2---------------------");
 				} else if (map == maps.map2) {
 					map = maps.start;
-					maps.map2 = assets.ogmap2;
+					maps.map2 = resetLevel(assets.ogmap2);
 					// System.out.println("Stage3---------------------");
 				} else if (map == maps.map3) {
 					map = maps.start;
-					maps.map3 = assets.ogmap3;
+					maps.map3 = resetLevel(assets.ogmap3);
 					// System.out.println("Stage4---------------------");
 				} else if (map == maps.map4) {
 					map = maps.start;
-					maps.map4 = assets.ogmap4;
+					maps.map4 = resetLevel(assets.ogmap4);
 					// System.out.println("Stage5---------------------");
 				} else if (map == maps.map5) {
 					map = maps.start;
-					maps.map5 = assets.ogmap5;
+					maps.map5 = resetLevel(assets.ogmap5);
 					// System.out.println("Stage6---------------------");
 				} else if (map == maps.map6) {
 					map = maps.start;
-					maps.map6 = assets.ogmap6;
+					maps.map6 = resetLevel(assets.ogmap6);
 					// System.out.println("Stage1---------------------");
 				} else if (map == maps.start) {
 
@@ -534,9 +600,28 @@ public class main {
 			}
 
 			while (Dead) {
-				System.out.println("dead");
-				gc.getChar();
-				break;
+				
+				// Animation
+				
+				mouseclick = gc.getMouseClick();
+				gc.setColor(Color.YELLOW);
+				gc.fillRect(3 * pixel, 3 * pixel, 6 * pixel, 10 * pixel);
+				gc.setColor(Color.RED);
+				gc.fillRect(4*pixel, 10*pixel, pixel, pixel);
+				if ((mouseclick != 0) && (4 * pixel < gc.getMouseX()) && (gc.getMouseX() < 5 * pixel)
+						&& (10 * pixel < gc.getMouseY()) && (gc.getMouseY() < 11 * pixel)) {
+					Life = 1;
+					Finish = true;
+					Dead = false;
+					System.out.println("Yuh");
+		
+				}
+				if ((mouseclick != 0) && (11 * pixel < gc.getMouseX()) && (gc.getMouseX() < 12 * pixel)
+						&& (0 * pixel < gc.getMouseY()) && (gc.getMouseY() < 1 * pixel)) {
+					break;
+				}
+				//gc.getChar();
+				//break;
 
 			}
 
@@ -571,5 +656,15 @@ public class main {
 			map = stages.map6;
 		}
 		return map;
+	}
+
+	static int[][] resetLevel(int[][] mapToCopy) {
+		int[][] result = new int[mapToCopy.length][mapToCopy[0].length];
+		for (int i = 0; i < mapToCopy.length; i++) {
+			for (int j = 0; j < mapToCopy[i].length; j++) {
+				result[i][j] = mapToCopy[i][j];
+			}
+		}
+		return result;
 	}
 }
