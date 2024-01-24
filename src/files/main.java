@@ -1,3 +1,10 @@
+//Tei and Nihaal
+//Tomb of the mask final project
+//January 19, 2024
+/* This class file includes the main method for the game and has majority of the code. This method draws everything for the game,
+ * has all of the user input, carries out said input, animation, movement of the screen, changes maps once completed, plays sound effects, 
+ * and resets the map after completion. this file includes all of the game play.*/
+
 package files;
 
 import hsa2.GraphicsConsole;
@@ -12,12 +19,14 @@ public class main {
 
 	}
 
+	//set the x andd y values of the Graphics Console
 	static int mapX = 36 * 12;
 	static int mapY = 48 * 12;
 	static GraphicsConsole gc = new GraphicsConsole(mapX, mapY, "Tomb of the Mask");
 
 	main() throws InterruptedException {
 
+		//initialize Final integer values
 		final int LvlW = 64;
 		final int LvlH = 64;
 		final int Pixel = 36;
@@ -26,32 +35,31 @@ public class main {
 		final int Xblocks = 26;
 		final int Yblocks = 46;
 		final int Delay = 15;
-
+`		
+		//Initialize integer values
 		int Ticks = 0;
 		int MaskTicks = 1;
 		int AnimationTicks = 1;
-
 		int OffsetX = 0;
 		int OffsetY = 0;
+		int Life = 1;
+		int Maskx = 0;
+		int Masky = 0;
+		int Balance = 0;
+		int MouseClick = 0;
 
+		//Initialize Boolean values
 		Boolean Start = false;
 		Boolean Finish = true;
 		Boolean Dead = false;
 		Boolean Shield = false;
 		Boolean DrawMask = false;
 
-		int Life = 1;
-		int Maskx = 0;
-		int Masky = 0;
-
-		int Balance = 0;
-		int MouseClick = 0;
-
+		//Initialize Sound Boolean Values
 		Boolean Audio = true;
 		Boolean SFX = true;
 
 		// 1 = up; 2 = left; 3 = down; 4 = right;
-
 		int MaskD = 0;
 		Boolean Move = false;
 
@@ -60,8 +68,10 @@ public class main {
 		int LavaSpeed = 1;
 		int Lavay = mapY;
 
+		// Initialize 2d map array
 		int[][] map = stages.start;
 
+		// Initialize all gc methods
 		gc.setLocationRelativeTo(null);
 		gc.enableMouse();
 		gc.enableMouseMotion();
@@ -70,6 +80,7 @@ public class main {
 		gc.setFont(new Font("Showcard Gothic", Font.BOLD, 25));
 		gc.playSoundLoop(assets.smusic);
 
+		// main method while loop
 		while (true) {
 			while (Start) {
 				synchronized (gc) {
@@ -81,12 +92,17 @@ public class main {
 					for (int row = 0; row < map.length; row++) {
 						for (int col = 0; col < map[0].length; col++) {
 
+							// Set the X and Y values of images for the game play screen to column or row
 							int ImageStartingX = col * Pixel - OffsetX;
 							int ImageStartingY = row * Pixel - OffsetY;
+
+							// Set the X and Y values of images for the Level Select to column or row
 							int LevelStartingX = col * PixelStart;
 							int LevelStartingY = row * PixelStart;
 
 							switch (map[row][col]) {
+
+							// Draw Images for game play screen
 							case 1:
 								gc.drawImage(assets.dot, ImageStartingX, ImageStartingY, Pixel, Pixel);
 								break;
@@ -113,6 +129,8 @@ public class main {
 									gc.drawImage(assets.wall1, ImageStartingX, ImageStartingY, Pixel, Pixel);
 								}
 								break;
+
+							// Draw Images for level select screen
 							case 10:
 								gc.drawImage(assets.stage1, LevelStartingX, LevelStartingY, LvlW, LvlH);
 								break;
@@ -146,19 +164,26 @@ public class main {
 					int centerX = Maskx * Pixel - OffsetX + (Pixel / 2);
 					int centerY = Masky * Pixel - OffsetY + (Pixel / 2);
 
+					// Character Rotation
 					if (DrawMask) {
+						// Rotate up
 						if (MaskD == 1) {
 							gc.setRotation(180, centerX, centerY);
+							// Rotate left
 						} else if (MaskD == 2) {
 							gc.setRotation(90, centerX, centerY);
+							// Rotate down
 						} else if (MaskD == 3) {
 							gc.setRotation(0, centerX, centerY);
+							// Rotate right
 						} else if (MaskD == 4) {
 							gc.setRotation(270, centerX, centerY);
 						}
+						// Draw main character
 						gc.drawImage(assets.mask, Maskx * Pixel - OffsetX, Masky * Pixel - OffsetY, Pixel, Pixel);
 						gc.clearRotation();
 
+						// Draw coin and pause icon as well as the balance
 						gc.setColor(Color.BLACK);
 						gc.fillRect(0, 0, 3 * Pixel, Pixel);
 						gc.fillRect(11 * Pixel, 0, Pixel, Pixel);
@@ -185,7 +210,7 @@ public class main {
 						// break out of while(start) loop
 						break;
 					}
-
+					// update values if character died
 					if (Life < 1) {
 						Dead = true;
 						Start = false;
@@ -213,12 +238,11 @@ public class main {
 					if (gc.isKeyDown(GraphicsConsole.VK_ENTER)) {
 						if (Life == 1 && (Balance >= 100) && !Shield) {
 							Life++;
-							// System.out.println("SHIELD ++ " + Life);
 							Balance -= 100;
 							Shield = true;
 						}
 					}
-					
+					// call the pauseChecker method
 					Finish = pauseChecker(Pixel);
 					if (Finish) {
 						break;
@@ -251,9 +275,11 @@ public class main {
 						AnimationTicks++;
 						SFX = true;
 					}
+					// reset animation ticks every 4 count
 					if (AnimationTicks > 4) {
 						AnimationTicks = 1;
 					}
+					// update image for every tick
 					if (AnimationTicks == 4) {
 						assets.star = assets.loadImage("star4");
 						assets.coin = assets.loadImage("coin4");
@@ -275,13 +301,14 @@ public class main {
 					if (!Move) {
 						if (MaskTicks > 6)
 							MaskTicks = 1;
-
+						// call getNextMaskAnimation method
 						assets.mask = getNextMaskAnimation(MaskTicks);
+						// add ball animation if character moves
 					} else {
 						assets.mask = assets.loadImage("ball");
 					}
 
-					// Collision Detection
+					// call balanceUpdate method
 					Integer NewBalance = balanceUpdate(map, Maskx, Masky, Audio, Finish);
 					if (NewBalance != null) {
 						if (NewBalance == 0) {
@@ -290,32 +317,37 @@ public class main {
 						}
 						Balance += NewBalance;
 					}
-					//call updateMovement method 
+					// call updateMovement method
 					movementResult Result = updateMovement(map, Masky, Maskx, SFX, MaskD);
 					if (Result != null) {
-						
+
 						SFX = Result.SFX;
 						Move = Result.Move;
 						Shield = Result.Shield;
-						Life -= Result.Life;
 						MaskD = Result.MaskD;
+						//-1 life if collision with damaging block
+						Life -= Result.Life;
+
 					}
 
-					// Scroll the screen up/down/left/right to keep the character on-screen
+					// call the calculateOffsetX method to move screen horizontally
 					OffsetX = calculateOffsetX(Margin, Pixel, Xblocks, Maskx);
+					// call the calculateOffsetY method to move screen vertically
 					OffsetY = calculateOffsetY(Margin, Pixel, Yblocks, Masky);
 
 				}
 
 				if (map == stages.start) {
 					gc.setCursor(10, 10);
-					
+
+					// call nextLevel method
 					int[][] nextLevel = levelSelect(gc.getMouseClick(), PixelStart, LvlW, LvlH);
 					// check if mouse is pressed
 					if (nextLevel != null) {
 						map = nextLevel;
 						DrawMask = true;
-						// gc.playSound(assets.sstart);
+						gc.playSound(assets.sstart);
+						// set character coordinates for each map
 						if (map == stages.map1) {
 							Maskx = 17;
 							Masky = 35;
@@ -349,7 +381,7 @@ public class main {
 				// reset character movement and stop drawing mask in the start screen
 				MaskD = 0;
 				DrawMask = false;
-				// Map Transitions
+				// Map Transitions and call resetLevel method
 				if (map == stages.map1) {
 					map = stages.start;
 					stages.map1 = resetLevel(assets.ogmap1);
@@ -377,20 +409,25 @@ public class main {
 				} else if (map == stages.start) {
 
 				}
+				// update finish and start values
 				Finish = false;
 				Start = true;
 				break;
 			}
 
+			// dead loop
 			while (Dead) {
 				synchronized (gc) {
+					// death screen
 					MouseClick = gc.getMouseClick();
 					gc.setColor(Color.YELLOW);
 					gc.fillRect(3 * Pixel, 3 * Pixel, 6 * Pixel, 10 * Pixel);
 					gc.setColor(Color.RED);
 					gc.fillRect(4 * Pixel, 10 * Pixel, 4 * Pixel, Pixel);
+					// mouse input for replay
 					if ((MouseClick != 0) && (4 * Pixel < gc.getMouseX()) && (gc.getMouseX() < 5 * Pixel + 3 * Pixel)
 							&& (10 * Pixel < gc.getMouseY()) && (gc.getMouseY() < 11 * Pixel)) {
+						// update values
 						Life = 1;
 						Finish = true;
 						Dead = false;
@@ -403,88 +440,114 @@ public class main {
 		}
 
 	}
-	
-	//updating the properties of movement given which direction (wasd) and what object is in the way
+
+	// updating the properties of movement given which direction (wasd) and what object is in the way
 	static movementResult updateMovement(int[][] map, int Masky, int Maskx, Boolean SFX, int MaskD) {
 		movementResult Result = new movementResult();
-		//give the object MaskD the existing value so it doesn't default to zero
+		// give the object MaskD the existing value so it doesn't default to zero
 		Result.MaskD = MaskD;
-		
+
+		// if mask direction is up
 		if (MaskD == 1) {
+			// check for collision detection with objects in direction
 			if (map[Masky - 1][Maskx] != 9 && map[Masky - 1][Maskx] != 6 && map[Masky - 1][Maskx] != 5) {
 				Result.Move = true;
+				// play sound
 				if (SFX) {
 					gc.playSound(assets.sjump);
 					Result.SFX = false;
 				}
+				// check for collision detection with objects in direction
 			} else if (map[Masky - 1][Maskx] == 5 || map[Masky - 1][Maskx] == 7) {
+				// update values if collision with a damaging object
 				Result.Life = 1;
 				Result.Shield = false;
 				Result.MaskD = 0;
 			} else {
+				// reset move
 				Result.Move = false;
 			}
 			return Result;
+			// if mask direction is left
 		} else if (MaskD == 2) {
+			// check for collision detection with objects in direction
 			if (map[Masky][Maskx - 1] != 9 && map[Masky][Maskx - 1] != 6 && map[Masky][Maskx - 1] != 5) {
 				Result.Move = true;
+				// play sound
 				if (SFX) {
 					gc.playSound(assets.sjump);
 					Result.SFX = false;
 				}
+				// check for collision detection with objects in direction
 			} else if (map[Masky][Maskx - 1] == 5 || map[Masky][Maskx - 1] == 7) {
+				// update values if collision with a damaging object
 				Result.Life = 1;
 				Result.Shield = false;
 				Result.MaskD = 0;
 			} else {
+				// reset move
 				Result.Move = false;
 			}
 			return Result;
+			// if mask direction is down
 		} else if (MaskD == 3) {
+			// check for collision detection with objects in direction
 			if (map[Masky + 1][Maskx] != 9 && map[Masky + 1][Maskx] != 6 && map[Masky + 1][Maskx] != 5) {
 				Result.Move = true;
+				// play sound
 				if (SFX) {
 					gc.playSound(assets.sjump);
 					Result.SFX = false;
 				}
+				// check for collision detection with objects in direction
 			} else if ((map[Masky + 1][Maskx] == 5 || map[Masky + 1][Maskx] == 7)) {
+				// update values if collision with a damaging object
 				Result.Life = 1;
 				Result.Shield = false;
 				Result.MaskD = 0;
 			} else {
+				// reset move
 				Result.Move = false;
 			}
 			return Result;
+			// if mask direction is right
 		} else if (MaskD == 4) {
+			// check for collision detection with objects in direction
 			if (map[Masky][Maskx + 1] != 9 && map[Masky][Maskx + 1] != 6 && map[Masky][Maskx + 1] != 5) {
 				Result.Move = true;
+				// play sound
 				if (SFX) {
 					gc.playSound(assets.sjump);
 					Result.SFX = false;
 				}
+				// check for collision detection with objects in direction
 			} else if ((map[Masky][Maskx + 1] == 5 || map[Masky][Maskx + 1] == 7)) {
+				// update values if collision with a damaging object
 				Result.Life = 1;
 				Result.Shield = false;
 				Result.MaskD = 0;
 			} else {
+				// reset move
 				Result.Move = false;
 			}
 			return Result;
 		}
+		//return null if nothing is pressed
 		return null;
 	}
+
 	// Set up and check if the user clicks on pause
 	static boolean pauseChecker(int Pixel) {
 		boolean Finish = false;
 		int MouseClick;
-		// Pause
+		// check for collision with mouse and pause icon
 		MouseClick = gc.getMouseClick();
 		if ((MouseClick != 0) && (11 * Pixel < gc.getMouseX()) && (gc.getMouseX() < 12 * Pixel)
 				&& (0 * Pixel < gc.getMouseY()) && (gc.getMouseY() < 1 * Pixel)) {
-			System.out.println("pause " + MouseClick);
-
+			
 			while (true) {
 				synchronized (gc) {
+					//draw pause menu
 					MouseClick = gc.getMouseClick();
 					gc.setColor(Color.YELLOW);
 					gc.fillRect(3 * Pixel, 3 * Pixel, 6 * Pixel, 10 * Pixel);
@@ -493,11 +556,12 @@ public class main {
 					gc.fillRect(7 * Pixel, 10 * Pixel, Pixel, Pixel);
 					gc.drawImage(assets.wasd, 4 * Pixel, 6 * Pixel, 150, 43);
 
+					//if blue rectangle on left is pressed, return to game play
 					if ((MouseClick != 0) && (4 * Pixel < gc.getMouseX()) && (gc.getMouseX() < 5 * Pixel)
 							&& (10 * Pixel < gc.getMouseY()) && (gc.getMouseY() < 11 * Pixel)) {
 						break;
 					}
-
+					//if blue rectangle on left is pressed, return to start screen
 					if ((MouseClick != 0) && (7 * Pixel < gc.getMouseX()) && (gc.getMouseX() < 8 * Pixel)
 							&& (10 * Pixel < gc.getMouseY()) && (gc.getMouseY() < 11 * Pixel)) {
 						Finish = true;
@@ -506,25 +570,30 @@ public class main {
 				}
 			}
 		}
-
 		return Finish;
 	}
-	//change the balance and replace the dots,coins, and stars with blank squares
+
+	// change the balance and replace the dots,coins, and stars with blank squares
 	static Integer balanceUpdate(int[][] map, int Maskx, int Masky, Boolean Audio, Boolean Finish) {
 		Integer Balance = null;
 
+		//update balance if character moves over a dot
 		if (map[Masky][Maskx] == 1) {
 			map[Masky][Maskx] = 0;
 			Balance = 1;
+			//update balance if character moves over a coin
 		} else if (map[Masky][Maskx] == 2) {
 			map[Masky][Maskx] = 0;
 			Balance = 5;
+			//play sound effect
 			if (Audio) {
 				gc.playSound(assets.scoin);
 			}
+			//update balance if character moves over a star
 		} else if (map[Masky][Maskx] == 3) {
 			map[Masky][Maskx] = 0;
 			Balance = 10;
+			//play sound effect
 			if (Audio) {
 				gc.playSound(assets.sstar);
 			}
@@ -538,10 +607,13 @@ public class main {
 		}
 		return Balance;
 	}
+
 	// Change Mask Image every Masktick (animation tick)
 	static Image getNextMaskAnimation(int MaskTicks) {
+		//set mask to null
 		Image mask = null;
 
+		//change mask image
 		if (MaskTicks == 6) {
 			mask = assets.loadImage("Mask6");
 		} else if (MaskTicks == 5) {
@@ -557,7 +629,8 @@ public class main {
 		}
 		return mask;
 	}
-	//calculate how much to move the screen by horizontally 
+
+	// calculate how much to move the screen by horizontally
 	static int calculateOffsetX(int Margin, int Pixel, int Xblocks, int Maskx) {
 		int OffsetX = 0;
 		int Xposition = Maskx * Pixel;
@@ -576,7 +649,8 @@ public class main {
 		}
 		return OffsetX;
 	}
-	//calculate how much to move the screen by vertically 
+
+	// calculate how much to move the screen by vertically
 	static int calculateOffsetY(int Margin, int Pixel, int Yblocks, int Masky) {
 		int OffsetY = 0;
 		int Yposition = Masky * Pixel;
@@ -648,4 +722,6 @@ public class main {
 		return result;
 	}
 }
+
+
 
