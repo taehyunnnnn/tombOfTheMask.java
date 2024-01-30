@@ -1,7 +1,7 @@
 //Tei and Nihaal
 //Tomb of the mask final project
 //January 19, 2024
-//This class file
+//This class file contains the variables that are used in the updateMovement method
 
 package files;
 
