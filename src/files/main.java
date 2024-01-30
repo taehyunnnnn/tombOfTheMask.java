@@ -35,7 +35,7 @@ public class main {
 		final int Xblocks = 26;
 		final int Yblocks = 46;
 		final int Delay = 15;
-`		
+		
 		//Initialize integer values
 		int Ticks = 0;
 		int MaskTicks = 1;
@@ -722,6 +722,5 @@ public class main {
 		return result;
 	}
 }
-
 
 
