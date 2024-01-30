@@ -1,3 +1,9 @@
+//Tei and Nihaal
+//Tomb of the mask final project
+//January 19, 2024
+/* This class file includes the initialization of all of the images, sounds and the 2d array of the template of all of the maps.
+ * All of these assets are being refrenced and used in the main class file*/
+
 package files;
 
 import java.awt.Image;
@@ -7,65 +13,51 @@ import javax.sound.sampled.Clip;
 public class assets {
 		
 	// Audios
-		static Clip smusic = main.gc.loadSound("sources/main.wav");
-		static Clip sstar1 = main.gc.loadSound("sources/1-star.wav");
-		static Clip sstar2 = main.gc.loadSound("sources/2-star.wav");
-		static Clip sstar3 = main.gc.loadSound("sources/3-star.wav");
-		static Clip scoin = main.gc.loadSound("sources/coin.wav");
-		static Clip sstar = main.gc.loadSound("sources/star.wav");
-		static Clip sdeath = main.gc.loadSound("sources/death.wav");
-		static Clip sexit = main.gc.loadSound("sources/win.wav");
-		static Clip sjump = main.gc.loadSound("sources/jump.wav");
-		static Clip sland = main.gc.loadSound("sources/landing.wav");
-		static Clip sscore_count = main.gc.loadSound("sources/score-count.wav");
-		static Clip sshield = main.gc.loadSound("sources/shield.wav");
-		static Clip sspikein = main.gc.loadSound("sources/spikesinwalls-attack.wav");
-		static Clip sspikeout = main.gc.loadSound("sources/spikesinwalls-on-off.wav");
-		static Clip sstart = main.gc.loadSound("sources/start.wav");
+		static Clip smusic = loadSound("main");
+		static Clip sstar1 = loadSound("1-star");
+		static Clip sstar2 = loadSound("2-star");
+		static Clip sstar3 = loadSound("3-star");
+		static Clip scoin = loadSound("coin");
+		static Clip sstar = loadSound("star");
+		static Clip sdeath = loadSound("death");
+		static Clip sexit =loadSound("win");
+		static Clip sjump =loadSound("jump");
+		static Clip sland = loadSound("landing");
+		static Clip sscore_count =loadSound("score-count");
+		static Clip sshield = loadSound("shield");
+		static Clip sspikein = loadSound("spikesinwalls-attack");
+		static Clip sspikeout = loadSound("spikesinwalls-on-off");
+		static Clip sstart = loadSound("start");
 		
 	// Graphics
-		static Image coin = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/coin1.png"));
-		static Image dot = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/dot.png"));
-		static Image entrance = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/entrance.png"));
-		static Image exit = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/exit1.png"));
-		static Image mask = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/mask1.png"));
-		static Image spike = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/spike.png"));
-		static Image spiketrap = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/spike trap.png"));
-		static Image star = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/star.png"));
-		static Image wall1 = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/wall1.png"));
-		static Image wall2 = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/wall2.png"));
+		static Image coin = loadImage("coin1");
+		static Image coinicon = loadImage("coinicon");
+		static Image dot = loadImage("dot");
+		static Image entrance = loadImage("entrance");
+		static Image exit = loadImage("exit1");
+		static Image mask = loadImage("mask1");
+		static Image spike = loadImage("spike");
+		static Image spiketrap = loadImage("spike trap");
+		static Image star = loadImage("star");
+		static Image wall1 = loadImage("wall1");
+		static Image wall2 = loadImage("wall2");
+		static Image wasd = loadImage("wasd");
 		
-		static Image stage1 = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/stage1.png"));
-		static Image stage2 = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/stage2.png"));
-		static Image stage3 = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/stage3.png"));
-		static Image stage4 = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/stage4.png"));
-		static Image stage5 = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/stage5.png"));
-		static Image stage6 = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/stage6.png"));
-		static Image stages = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/stages.png"));
-		static Image enter = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/enter.png"));
-		static Image esc = Toolkit.getDefaultToolkit()
-				.getImage(main.gc.getClass().getClassLoader().getResource("sources/esc.png"));
+		
+		static Image stage1 = loadImage("stage1");
+		static Image stage2 = loadImage("stage2");
+		static Image stage3 = loadImage("stage3");
+		static Image stage4 = loadImage("stage4");
+		static Image stage5 = loadImage("stage5");
+		static Image stage6 = loadImage("stage6");
+		static Image stages = loadImage("stages");
+		static Image enter = loadImage("enter");
+		static Image esc = loadImage("esc");
+		static Image pause = loadImage("pause");
 		
 	// Maps
 		final static int [][] ogmap1 = {
+				
 				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -76,7 +68,6 @@ public class assets {
 				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,9,9,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,4,9,0,0,0,0,0,0,0,0,0},
-				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,1,9,0,0,0,0,0,0,0,0,0},
 				{0,0,0,0,0,0,0,0,0,0,0,9,9,9,9,1,9,0,0,0,0,0,0,0,0,0},
@@ -368,12 +359,16 @@ public class assets {
 		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 				};
 
+		static Clip loadSound (String FileName) {
+			String FullFilePath = "sources/" + FileName + ".wav";
+			return main.gc.loadSound (FullFilePath);
+		}
 		
 		
-		
-		
-		
-		
-		
-		
+		static Image loadImage(String FileName) {
+			String FullFilePath = "sources/" + FileName + ".png";
+			return Toolkit.getDefaultToolkit().getImage(main.gc.getClass().getClassLoader().getResource(FullFilePath));
+
+		}	
 }
+
