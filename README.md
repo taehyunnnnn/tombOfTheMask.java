@@ -1,9 +1,9 @@
 # Tomb of the Mask (Final Project)
 
 A Java-based arcade maze game inspired by *Tomb of the Mask*.  
-Built as a final project by **Tei** and **Nihaal** (Jan 19, 2024).
+Built by **Tei** and **Nihaal**.
 
-Navigate through grid-based levels, collect items, avoid traps, and reach the exit ✅
+Navigate through grid-based levels, collect items, avoid traps, and reach the exit
 
 ---
 
