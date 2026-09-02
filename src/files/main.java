@@ -416,22 +416,43 @@ public class main {
 			}
 
 			// dead loop
+			Thread.sleep(500);
 			while (Dead) {
 				synchronized (gc) {
-					// death screen
 					MouseClick = gc.getMouseClick();
-					gc.setColor(Color.YELLOW);
+
+					// dark background panel
+					gc.setColor(new Color(30, 30, 30));
 					gc.fillRect(3 * Pixel, 3 * Pixel, 6 * Pixel, 10 * Pixel);
+
+					// red header bar
+					gc.setColor(Color.RED);
+					gc.fillRect(3 * Pixel, 3 * Pixel, 6 * Pixel, Pixel);
+
+					// "YOU DIED" title in header
+					gc.setColor(Color.WHITE);
+					gc.setFont(new Font("Showcard Gothic", Font.BOLD, 24));
+					gc.drawString("YOU DIED", 3 * Pixel + 22, 4 * Pixel - 7);
+
+					// score display
+					gc.setColor(Color.YELLOW);
+					gc.setFont(new Font("Showcard Gothic", Font.BOLD, 20));
+					gc.drawString("Score: " + Balance, 4 * Pixel + 12, 6 * Pixel + 10);
+
+					// play again button
 					gc.setColor(Color.RED);
 					gc.fillRect(4 * Pixel, 10 * Pixel, 4 * Pixel, Pixel);
+					gc.setColor(Color.WHITE);
+					gc.setFont(new Font("Showcard Gothic", Font.BOLD, 16));
+					gc.drawString("PLAY AGAIN", 4 * Pixel + 14, 11 * Pixel - 12);
+
 					// mouse input for replay
 					if ((MouseClick != 0) && (4 * Pixel < gc.getMouseX()) && (gc.getMouseX() < 5 * Pixel + 3 * Pixel)
 							&& (10 * Pixel < gc.getMouseY()) && (gc.getMouseY() < 11 * Pixel)) {
-						// update values
+						gc.setFont(new Font("Showcard Gothic", Font.BOLD, 25));
 						Life = 1;
 						Finish = true;
 						Dead = false;
-
 					}
 
 				}
@@ -547,23 +568,51 @@ public class main {
 			
 			while (true) {
 				synchronized (gc) {
-					//draw pause menu
 					MouseClick = gc.getMouseClick();
-					gc.setColor(Color.YELLOW);
+
+					// dark background panel
+					gc.setColor(new Color(30, 30, 30));
 					gc.fillRect(3 * Pixel, 3 * Pixel, 6 * Pixel, 10 * Pixel);
-					gc.setColor(Color.BLUE);
-					gc.fillRect(4 * Pixel, 10 * Pixel, Pixel, Pixel);
-					gc.fillRect(7 * Pixel, 10 * Pixel, Pixel, Pixel);
+
+					// blue header bar
+					gc.setColor(new Color(30, 100, 200));
+					gc.fillRect(3 * Pixel, 3 * Pixel, 6 * Pixel, Pixel);
+
+					// "PAUSED" title
+					gc.setColor(Color.WHITE);
+					gc.setFont(new Font("Showcard Gothic", Font.BOLD, 24));
+					gc.drawString("PAUSED", 3 * Pixel + 42, 4 * Pixel - 7);
+
+					// controls label + wasd image
+					gc.setColor(new Color(160, 160, 160));
+					gc.setFont(new Font("Showcard Gothic", Font.BOLD, 13));
+					gc.drawString("CONTROLS", 4 * Pixel + 22, 6 * Pixel - 5);
 					gc.drawImage(assets.wasd, 4 * Pixel, 6 * Pixel, 150, 43);
 
-					//if blue rectangle on left is pressed, return to game play
-					if ((MouseClick != 0) && (4 * Pixel < gc.getMouseX()) && (gc.getMouseX() < 5 * Pixel)
+					// resume button
+					gc.setColor(new Color(30, 100, 200));
+					gc.fillRect(4 * Pixel, 10 * Pixel, 2 * Pixel, Pixel);
+					gc.setColor(Color.WHITE);
+					gc.setFont(new Font("Showcard Gothic", Font.BOLD, 14));
+					gc.drawString("RESUME", 4 * Pixel + 8, 11 * Pixel - 12);
+
+					// menu button
+					gc.setColor(new Color(80, 80, 80));
+					gc.fillRect(7 * Pixel, 10 * Pixel, 2 * Pixel, Pixel);
+					gc.setColor(Color.WHITE);
+					gc.setFont(new Font("Showcard Gothic", Font.BOLD, 14));
+					gc.drawString("MENU", 7 * Pixel + 20, 11 * Pixel - 12);
+
+					// resume on left button click
+					if ((MouseClick != 0) && (4 * Pixel < gc.getMouseX()) && (gc.getMouseX() < 6 * Pixel)
 							&& (10 * Pixel < gc.getMouseY()) && (gc.getMouseY() < 11 * Pixel)) {
+						gc.setFont(new Font("Showcard Gothic", Font.BOLD, 25));
 						break;
 					}
-					//if blue rectangle on left is pressed, return to start screen
-					if ((MouseClick != 0) && (7 * Pixel < gc.getMouseX()) && (gc.getMouseX() < 8 * Pixel)
+					// return to level select on right button click
+					if ((MouseClick != 0) && (7 * Pixel < gc.getMouseX()) && (gc.getMouseX() < 9 * Pixel)
 							&& (10 * Pixel < gc.getMouseY()) && (gc.getMouseY() < 11 * Pixel)) {
+						gc.setFont(new Font("Showcard Gothic", Font.BOLD, 25));
 						Finish = true;
 						break;
 					}
