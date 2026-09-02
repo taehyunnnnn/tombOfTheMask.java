@@ -359,14 +359,16 @@ public class assets {
 		        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 				};
 
+		// Load a WAV file from src/resources/ by name (without extension)
 		static Clip loadSound (String FileName) {
-			String FullFilePath = "sources/" + FileName + ".wav";
+			String FullFilePath = "resources/" + FileName + ".wav";
 			return main.gc.loadSound (FullFilePath);
 		}
 		
 		
+		// Load a PNG image from src/resources/ via the classloader by name (without extension)
 		static Image loadImage(String FileName) {
-			String FullFilePath = "sources/" + FileName + ".png";
+			String FullFilePath = "resources/" + FileName + ".png";
 			return Toolkit.getDefaultToolkit().getImage(main.gc.getClass().getClassLoader().getResource(FullFilePath));
 
 		}	
